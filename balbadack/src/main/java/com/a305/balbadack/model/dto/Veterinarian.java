@@ -47,6 +47,9 @@ public class Veterinarian {
   @Column(length = 500)
   private String v_special;
 
+  @Column(length = 20)
+  private String v_name;
+
   // 외래키 설정
   @OneToOne(mappedBy="user")
   private User user;
