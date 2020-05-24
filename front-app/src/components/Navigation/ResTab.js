@@ -60,7 +60,6 @@ export default function ResTab() {
 
     return (
         <div>
-
             <Paper className={classes.root}>
                 <Tabs
                     variant="fullWidth"

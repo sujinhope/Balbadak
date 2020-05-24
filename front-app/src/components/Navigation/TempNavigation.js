@@ -3,7 +3,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import PersonIcon from "@material-ui/icons/Person";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'
-
+import history from "../../history";
 const cx = classNames.bind(styles)
 
 
@@ -14,7 +14,7 @@ export default function Navigation(props) {
             <React.Fragment>
               <div className={cx('custom-nav')}>
                 <div className={cx('nav-icon-box')}>
-                  <ChevronLeftIcon/>
+                  <ChevronLeftIcon onClick={history.goBack}/>
                 </div>
                 <p className={cx('nav-title')}>행복 동물 병원 후기</p>
                 <div className={cx('nav-icon-box')}>
