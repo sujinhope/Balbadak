@@ -27,7 +27,7 @@ div {
 .tag-box {
   height:29.3px;
   @include width-size(0px);
-  @include scroll();
+  @include horizontal-scroll();
   @include flex-nowrap();
 }
 
@@ -94,4 +94,9 @@ div {
   .hos-name {
     font-size: 25px;
     padding-left: 10px;
+}
+
+.rev-box {
+  border-radius: 10px;
+  border: 1.3px solid $darkgreen;
 }
