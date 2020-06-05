@@ -93,6 +93,7 @@ public class AnimalController {
 		 * 로그인 아이디 조회
 		 */
 
+		 
         try {
             animalService.delete(u_id, a_code);
             return handleSuccess("동물정보 삭제하였습니다.");
