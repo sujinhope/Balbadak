@@ -80,7 +80,7 @@ export const getMyPage = () => {
     }
   } : null
   return dispatch => {
-    return apis.post('/user/mypage', null, config)
+    return apis.post('user/mypage', null, config)
       .then((res) => dispatch(recieveMyPage(res.data)))
   }
 }
@@ -88,8 +88,10 @@ export const getMyPage = () => {
 // 3.1. 마이페이지 user 에 저장하기
 export const recieveMyPage = (mypage) => {
   console.log('recieveMyPage')
-  // console.log(mypage.message)
+  console.log(mypage)
+  console.log(mypage.message)
   const result = mypage.message
+  window.sessionStorage.removeItem('myPage')
   window.sessionStorage.setItem('myPage', JSON.stringify(result))
   return {
     type: GET_MY_PAGE,
@@ -102,7 +104,7 @@ export const updateUser = (sms) => {
   console.log('updateUser')
   return dispatch => {
     dispatch(userUpdated(false))
-    return apis.post('user/sms?sms='+sms, config)
+    return apis.post('user/sms?sms='+sms, null, config)
       .then(() => {
         dispatch(userUpdated(true))
         dispatch(getMyPage())

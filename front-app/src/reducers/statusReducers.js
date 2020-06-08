@@ -15,11 +15,12 @@ import {
   REVIEW_UPDATED,
   REVIEW_DELETED,
   REVIEW_REPORTED, // report 관련
-  REPORT_CANCELED
+  REPORT_CANCELED,
+  SELECT_HOS,
 } from '../actions/types'
 
 const initializer = {
-  userUpdated: null,
+  userUpdated: false,
   petRegistered: null,
   petUpdated: null,
   petDeleted: null,
@@ -44,6 +45,7 @@ const initializer = {
   isSearching: false,
   isSms: false,
   isReciepting: false,
+  hosName: '',
 }
 
 
@@ -51,7 +53,7 @@ const initializer = {
 export default (state = initializer, action) => {
   switch (action.type) {
     case REVIEW_ACTION:
-      return {...state, [action.now]: action.code}
+      return { ...state, [action.now]: action.code }
     case USER_UPDATED:
       return { ...state, userUpdated: action.code }
     case PET_REGISTERED:
@@ -84,6 +86,8 @@ export default (state = initializer, action) => {
       return { ...state, reviewReported: action.code }
     case REPORT_CANCELED:
       return { ...state, reportCanceled: action.code }
+    case SELECT_HOS:
+      return { ...state, hosName: action.pathname }
     default:
       return state;
   }

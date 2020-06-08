@@ -211,6 +211,12 @@ class ReviewRes extends Component {
       
       list = resInfo.list
       console.log('ReviewRes list', list)
+      // if ( this.props.filter.includes('Star') ) { // 별점
+      //   console.log(list)
+      //   list = list.sort((a, b) => b.review.rstarrating - a.review.rstarrating)
+      // } else if (this.props.filter.includes('Review')) {  // 도움이
+      //   list = list.sort((a, b) => b.review.rtotalgood - a.review.rtotalgood )
+      // }
       reviewCards = list.map(r => <ReviewInfoCard hospitalData={r} key={`newCard${r.review.rcode}`}/>)
       // reviewCards = {reviewData}.reviewData.map(r => <ReviewInfoCard hospitalData={r} key={`newCard${r.hcode}`}/>)
     } else {

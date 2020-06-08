@@ -245,6 +245,7 @@ export const doDojang = (dojang) => {
 
 // 3. 영수증 정보 store에 저장
 export const uploadReciept = (bff, dateIs, hasHos, items) => {
+  console.log(bff, dateIs, hasHos, items)
   console.log("upload reciept")
   return {
     type: UPLOAD_RECIEPT,

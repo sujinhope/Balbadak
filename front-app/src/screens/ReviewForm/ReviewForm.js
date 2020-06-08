@@ -26,6 +26,11 @@ class ReviewForm extends React.Component {
       photoURL: [],
       selectedPhoto: null,
       content: "",
+      tempClinic: [
+        ['혈액검사-CBC', true, false],
+        ['주사비-입원처치', true, false],
+        ['심장사상충약 처방', false, true]
+      ]
     }
   }
 
@@ -77,7 +82,7 @@ class ReviewForm extends React.Component {
     console.log('beforeSubmit')
 
     for await (const photo of this.state.photos) {
-      const timeStamp = Math.floor(new Date().now() / 1000)
+      const timeStamp = Math.floor(new Date().now / 1000)
       // uid로 바꾸기
       const params = {
         Key: 'sim_' + timeStamp + '.jpg',
@@ -86,17 +91,17 @@ class ReviewForm extends React.Component {
       };
       await this.setState({ photoURL: this.state.photoURL.concat('sim_' + timeStamp + '.jpg') })
       console.log('submitting')
-      await s3.upload(params).catch(err => console.log('사진 업로드 중 에러가 발생했다냥', err))
+      await s3.upload(params)
     }
 
-    // 영수증도 업로드하기
-    const params = {
-      Key: 'sim_reciept_' + '.jpg',
-      Body: this.props.reciept,
-      ACL: "private",
-    };
+    // // 영수증도 업로드하기
+    // const params = {
+    //   Key: 'sim_reciept_' + '.jpg',
+    //   Body: this.props.reciept,
+    //   ACL: "private",
+    // };
 
-    await s3.upload(params).catch(err => console.log('영수증 업로드 중 에러가 발생했다냥', err))
+    // await s3.upload(params).catch(err => console.log('영수증 업로드 중 에러가 발생했다냥', err))
 
     console.log('compoleteSubmit')
   }
@@ -133,29 +138,26 @@ class ReviewForm extends React.Component {
     const body = new reviewFormer(10, data, carelist, 'sim').getBody()
     console.log('body', body)
     await review.postReview(body)
-    if (this.props.status.completeReview === true) {
-      window.alert('후기 작성이 완료되었다냥')
-      history.push('/')
-    } else {
-      window.alert('후기 업로드 도중 예상치 못한 에러가 발생했다냥ㅠ')
-    }
+    window.alert('후기 작성이 완료되었다냥')
+    history.push('/')
   }
 
-
+  async tableClick(i, ii) {
+    let temp = this.state.tempClinic
+    temp[i][ii] = !temp[i][ii]
+    await this.setState({tempClinic: temp})
+  }
   render() {
-    const animal = ['rabbit', 'dog']
+    const animal = ['dog']
     const animalsrc = animal.map(a => require(`../../assets/${a}.png`))
     const animalimg = animalsrc.map(url => { return <img key={url} src={url} alt={url} /> })
 
-    const tempClinic = [
-      ['혈액검사-CBC', true, false],
-      ['주사비-입원처치', true, false],
-      ['심장사상충약 처방', false, true]
-    ]
 
-    const clinicRow = tempClinic.map(t => {
-      return <tr>
-        {t.map(d => {return <td>{d === true ? <Pets style={{ fontSize:17 }}/> : d}</td>})}
+
+    const clinicRow = this.state.tempClinic.map((t, i) => {
+      return <tr key={`${t}-${i}`}>
+        {t.map((d, di) => 
+          { return <td key={`${d}-${di}`} onClick={()=> this.tableClick(i, di)}>{d === true ? <Pets style={{ fontSize:17 }}/> : d}</td> })}
       </tr>
     })
 
