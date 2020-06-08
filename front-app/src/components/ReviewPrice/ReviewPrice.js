@@ -8,9 +8,9 @@ class ReviewPrice extends Component {
   render() {
     const price = this.props.careinfo.map(
       ci => (
-        <div className={cx('price-box')} key={ci.ci_no}>
-          <p className={cx('menu')}>{ci.CareList.c_name}</p>
-          <p className={cx('price')}>{ci.ci_price}원</p>
+        <div className={cx('price-box')} key={ci.ciCode}>
+          <p className={cx('menu')}>{ci.ciName}</p>
+          <p className={cx('price')}>{ci.ciPrice}원</p>
         </div>
       )
     )

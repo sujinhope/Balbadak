@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Modal from '@material-ui/core/Modal';
-import history from '../../history';
 import firebase from '../../apis/firebase';
 import { connect } from 'react-redux'
 import { user } from '../../actions';
@@ -13,7 +11,6 @@ class smsVer extends Component {
     this.state = {
       message: '',
       random: '',
-      submitting: false,
       verifying: false,
       error: false,
       ver_num: '',
@@ -21,7 +18,6 @@ class smsVer extends Component {
   }
   async onSubmit () {
     console.log('smsVer this.state.message', this.state.message)
-    this.setState({ submitting: true });
     const number = '+82' + this.state.message.substr(1, 10);
     const recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha');
     const res = await firebase.auth().signInWithPhoneNumber(number, recaptcha)
@@ -37,20 +33,19 @@ class smsVer extends Component {
     return (
       <div className={cx('modal')}>
         <h3 className={cx('modal-header')}>번호 인증하기</h3>
-        <div className={cx('search-box')}>
-          <input
-            className={cx('input-box')}
-            type="tel"
-            placeholder='번호만 입력해주세요'
-            value={this.state.message}
-            onChange={(e) => 
-              this.setState({message: e.target.value})}
-          />
-        </div>
         <div className={cx('h-spacer')}></div>
-        <div className={cx('modal-body')}>
+        <div className={cx('auth-body')}>
+          <input
+              className={cx('input-box')}
+              type="tel"
+              placeholder='번호만 입력해주세요'
+              value={this.state.message}
+              onChange={(e) => 
+                this.setState({message: e.target.value})}
+            />
           <div id="recaptcha"></div>
-          <button className={cx('border-button')} onClick={() => this.onSubmit()}> 인증번호 전송 </button>
+          <div className={cx('h-spacer')}></div>
+          <div className={cx('border-button')} onClick={() => this.onSubmit()}> 인증번호 전송 </div>
         </div>
       </div>
 
@@ -66,7 +61,7 @@ const mapStateToProps = state => {
     isReciepting: state.status.isReciepting,
   };
 };
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     updateUser: (body) => dispatch(user.updateUser(body)),
     reviewIng : (now, code) => dispatch(user.reviewIng(now, code))

@@ -59,11 +59,12 @@ class HosRes extends Component {
 					h => <HosInfoCard map={false} hospitalData={h} key={h.hcode} />
 				)
 			}
+			const next = ((resInfo.next === 0) || (resInfo.next === false)) ? false : true
 			return (
 				<InfiniteScroll
 					pageStart={0}
 					loadMore={() => this.getMore(resInfo.page + 1)}
-					hasMore={resInfo.next}
+					hasMore={next}
 					loader={<div className="loader" key={0}>Loading ...</div>}
 					useWindow={false}
 				>

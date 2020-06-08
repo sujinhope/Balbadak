@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { hos } from '../../actions'
+import { hos, review } from '../../actions'
 
 import HosRes from './HosRes';
 import ReviewRes from './ReviewRes';
@@ -19,9 +19,9 @@ class ResTab extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			curr: 'res',
+			curr: this.props.curr,
 			near: true,
-			// filter: 'nearHos',
+			filter: 'nearHos',
 			map: false
 		}
 	}
@@ -78,8 +78,12 @@ class ResTab extends React.Component {
 		console.log(this.state.map)
 	}
 
+	async setSearchFlag(flag) {
+		await this.props.searchFlag(flag)
+	}
 
 	render() {
+		console.log(this.props.hos)
 		const { curr, near, map } = this.state
 		const { filter } = this.props.hos.mainSearch
 		const floating = (map === true) ? <ListIcon/> : <MapIcon/>
@@ -92,12 +96,16 @@ class ResTab extends React.Component {
 				<div className={cx('tab-container')}>
 					<div className={curr === 'hos' ? 
 						cx('cate-btn', 'passive-cate') : cx('cate-btn')}
-						onClick={() => this.setState({curr:'review'})}
+						onClick={() => {this.setState({curr:'review'})
+						this.setSearchFlag('review')
+					}}
 						><p>REVIEW</p></div>
 					<div className={cx('spacer')}></div>
 					<div className={curr === 'hos' ?
 						cx('cate-btn') : cx('cate-btn', 'passive-cate')}
-						onClick={() => this.setState({curr:'hos'})}
+						onClick={() => {this.setState({curr:'hos'})
+						this.setSearchFlag('hos')
+					}}
 						><p>HOSPITAL</p></div>
 				</div>
 				<div className={filter === 'hosByWord' ? 
@@ -127,13 +135,15 @@ class ResTab extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		hos : state.hos
+		hos : state.hos,
+		curr : state.status.searchFlag
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
-		mainSearch: (searchWord, lat, long, category, filter) => dispatch(hos.mainSearch(searchWord, lat, long, category, filter))
+		mainSearch: (searchWord, lat, long, category, filter) => dispatch(hos.mainSearch(searchWord, lat, long, category, filter)),
+		searchFlag: (flag) => dispatch(review.SearchFlag(flag))
 	};
 };
 

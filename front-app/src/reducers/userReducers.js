@@ -31,7 +31,7 @@ export default (state = initializer, action) => {
             // 디테일 어레이에 없는 정보를 새로 받아왔다는 가정하에 추가 (concat)
             return {...state, myPetDetails: state.myPetDetails.concat(action.animal)}
         case GET_MY_LIKE_HOS:
-            return {...state, likedHos:[...action.likeHos]}
+            return {...state, likedHos: action.data}
         default:
             return state;
     }

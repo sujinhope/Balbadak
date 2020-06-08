@@ -1,8 +1,9 @@
 /*global kakao*/
 import React, { Component } from "react";
 import styles from './mystyle.module.scss';
-import "react-image-gallery/styles/scss/image-gallery.scss";
-import "react-image-gallery/styles/css/image-gallery.css";
+// import "react-image-gallery/styles/scss/image-gallery.scss";
+// import "react-image-gallery/styles/css/image-gallery.css";
+import "./image-gallery.css";
 import ImageGallery from 'react-image-gallery';
 import Button from '@material-ui/core/Button';
 import classNames from 'classnames/bind';
@@ -10,24 +11,13 @@ import LittleMap from "../../components/LittleMap/LittleMap";
 import HosGrades from '../../components/HosGrades/HosGrades';
 import history from '../../history';
 import { connect } from "react-redux";
-import { review, user} from '../../actions';
+import { review, user, hos } from '../../actions';
+import imgA from "../../assets/imgA.png";
 //썸내일은... 리사이징...
-const images = [
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-];
-
-
+import fav1 from '../../assets/fav1.png';
+import fav2 from '../../assets/fav2.png';
+import ReviewInfoCard from '../../components/ReviewInfoCard/ReviewInfoCard';
+import BigMap from '../Res/BigMap';
 const reviewData = {
     r_no: 0,
     u_id: 'aestas',
@@ -38,7 +28,7 @@ const reviewData = {
     r_treatmentdata: '2020-05-10',
     r_date: '2020-05-10',
     tags: ['중성화수술이다옹', "고양이", "15kg", '정기적', "친절", "풀장", "감사"],
-    r_overtreatment: 1,
+    r_overtreatement: 1,
     r_kindness: 4,
     r_result: 4,
     r_clean: 4,
@@ -89,41 +79,131 @@ const reviewData = {
 const cx = classNames.bind(styles)
 class HosDetail extends Component {
     componentDidMount() {
-
         this.state.current_hos = this.props.location.state.localhos;
+        
+        console.log(this.props.location.state.localhos)
         review.setHosInfo(this.state.current_hos.hcode, this.state.current_hos.hname, this.state.current_hos.haddress);
     }
     constructor(props) {
         super(props);
         this.state = {
             current_hos: [],
+            image: [],
+            chk_fav: false,
+            cur_fav: false,
             grade: [
                 {
                     name: '적절한 치료',
-                    score: reviewData.r_overtreatment
+                    score: this.props.location.state.localhos.scoreOvertreatment
                 },
                 {
                     name: '친절함',
-                    score: reviewData.r_kindness
+                    score: this.props.location.state.localhos.scoreKindness
                 },
                 {
                     name: '치료결과',
-                    score: reviewData.r_result
+                    score: this.props.location.state.localhos.scoreResult
                 },
                 {
                     name: '청결',
-                    score: reviewData.r_clean
+                    score: this.props.location.state.localhos.scoreClean
                 }
             ]
         };
+        this.handlePhoneCall = this.handlePhoneCall.bind(this);
+        this.handleHomePage = this.handleHomePage.bind(this);
+        this.isFavorite = this.isFavorite.bind(this);
+        this.onclickfav = this.onclickfav.bind(this);
+        this.setFirstFav = this.setFirstFav.bind(this);
     }
+    async setFirstFav() {
+        this.setState({
+            chk_fav: true,
+        })
+        await this.props.getMyLikeHos('psj');
+        console.log('======done=====')
+        console.log(this.props.userlike)
+        for(var i = 0; i < this.props.userlike.length; i++) {
+            console.log('======11111111111=====')
+            console.log(this.props.location.state.localhos.hcode)
+            console.log(this.props.userlike[i].hcode)
+            if(this.props.location.state.localhos.hcode === this.props.userlike[i].hcode) {
+                this.setState({
+                    cur_fav: true,
+                })
+            }
+        }
+        
+            
+        
+        
+    }
+    setImage() {
+        console.log(this.props.location.state.localhos)
+        var hosPic = this.props.location.state.localhos.hospitalPicture;
+        if (!hosPic) {
+            this.state.image.push({
+                original: imgA,
+                thumbnail: imgA
+            })
+            console.log("imgA: ", imgA);
+        }
+        else {
+            console.log(hosPic)
+            for (var i = 0; i < hosPic.length; i += 2) {
+                this.state.image.push({
+                    original: hosPic[i].himage,
+                    thumbnail: hosPic[i + 1].himage
+                })
+                console.log(i, "/ ", hosPic[i].image)
+            }
+        }
+    }
+    isFavorite() {
 
-    handleChange() {
-
+        if (this.props.userlike) {
+            for (var i = 0; i < this.props.userlike; i++) {
+            }
+        }
+    }
+    handlePhoneCall() {
+        window.open(`tel:${this.state.current_hos.htel}`)
+    }
+    handleHomePage() {
+        if (this.props.location.state.localhos.hwebsite) {
+            window.open(`${this.props.location.state.localhos.hwebsite}`);
+        }
+        else {
+            window.alert("홈페이지 없다냥");
+        }
+    }
+    onclickfav() {
+        // this.props.getMyLikeHos('psj');
+        if (!this.state.cur_fav) {
+            // console.log(this.props.userData.accessToken)
+            // console.log(this.props.location.state.localhos.hcode)
+            this.props.likeHos(this.props.location.state.localhos.hcode)
+            // console.log(this.props)
+            this.setState({
+                cur_fav: true,
+            })
+        }
+        else {
+            this.setState({
+                cur_fav: false,
+            })
+        }
+    }
+    displayfav() {
+        if (!this.state.cur_fav) {
+            return <img src={fav1} className={cx('fav')} onClick={() => this.onclickfav()}></img>
+        }
+        else {
+            return <img src={fav2} className={cx('fav')} onClick={() => this.onclickfav()}></img>
+        }
     }
     setHos() {
         if (this.state.current_hos.length < 1) {
-            console.log('aaaaaaaaaaaaaaaaaaaaaaaa')
             this.state.current_hos = this.props.location.state.localhos
             console.log(this.state.current_hos.hname)
         }
@@ -136,12 +216,12 @@ class HosDetail extends Component {
                         <span className={cx('vet-name')}>{this.state.current_hos.hcity} <span className={cx('pipe')}>|</span> </span>
                         <span className={cx('vet-name')}>{this.state.current_hos.haddress}</span>
                     </div>
-
+                    {this.displayfav()}
                 </div>
 
                 <div className={cx('home-container')} >
-                    <button className={cx('homepage')} type="button"> 병원 홈페이지 </button>
-                    <button className={cx('phone')} type="button"> {this.state.current_hos.htel} </button>
+                    <button className={cx('homepage')} type="button" onClick={() => this.handleHomePage()}> 병원 홈페이지 </button>
+                    <button className={cx('phone')} type="button" onClick={() => this.handlePhoneCall()}> {this.state.current_hos.htel} </button>
                 </div>
 
             </>
@@ -160,11 +240,78 @@ class HosDetail extends Component {
     }
     clickReviewList() {
         console.log(this.state.current_hos.hcode)
+        this.props.getHosReview(this.state.current_hos.hcode)
+        history.push(`/hosRevForDetail`)
+    }
+    setPrice() {
+        return (
+            <div className={cx('grade-box')}>
+                <div>
+                    <p className={cx('day')} >
+                        <span> 중성화(수컷) <span className={cx('pipe')}> </span>  </span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 중성화(암컷) <span className={cx('pipe')}> </span>  </span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 발치 <span className={cx('pipe')}> </span>  </span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 고관절 수술(대형견) <span className={cx('pipe')}> </span>  </span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 고관절 수술(소형견) <span className={cx('pipe')}> </span>  </span>
+                    </p>
+                </div>
+                <div>
+                    <p className={cx('day')} >
+                        <span> 100,000 ~ 350,000 </span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 150,000 ~ 450,000 </span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 70,000 ~ 120,000 </span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 600,000 ~ 2,500,000</span>
+                    </p>
+                    <p className={cx('day')} >
+                        <span> 400,000 ~ 2,200,000</span>
+                    </p>
+                </div>
+            </div>
 
-        review.getHosReview(this.state.current_hos.hcode, this.props.userData.accessToken)
-        console.log(this.props.userData.accessToken)
+        )
+    }
+    gotoBigMap() {
+
+    }
+    setReviewList() {
+
     }
     setRunningTime() {
+        if (!this.state.current_hos.hmonday) {
+            this.state.current_hos.hmonday = "9:00 ~ 18:00"
+        }
+        if (!this.state.current_hos.htuesday) {
+            this.state.current_hos.htuesday = "9:00 ~ 18:00"
+        }
+        if (!this.state.current_hos.hwednesday) {
+            this.state.current_hos.hwednesday = "영업 안함"
+        }
+        if (!this.state.current_hos.hthursday) {
+            this.state.current_hos.hthursday = "9:00 ~ 18:00"
+        }
+        if (!this.state.current_hos.hfriday) {
+            this.state.current_hos.hfriday = "9:00 ~ 18:00"
+        }
+        if (!this.state.current_hos.hsaturday) {
+            this.state.current_hos.hsaturday = "9:00 ~ 18:00"
+        }
+        if (!this.state.current_hos.hsunday) {
+            this.state.current_hos.hsunday = "영업 안함"
+        }
         return (
             <div className={cx('column-box')}>
                 <p className={cx('day')} >
@@ -199,7 +346,17 @@ class HosDetail extends Component {
         );
     }
     render() {
-        console.log(this.props.hosInfo)
+        console.log(this.props.userData)
+        if (this.state.image.length < 1) {
+            this.setImage();
+        }
+        console.log(this.props)
+        if(!this.state.chk_fav) {
+            if(this.props.userlike) {
+                this.setFirstFav();
+            }
+            
+        }
         if (!this.props.hosInfo) {
             this.props.setHosInfo(this.state.current_hos.hcode, this.state.current_hos.hname, this.state.current_hos.haddress);
             console.log(this.props.hosInfo)
@@ -213,24 +370,22 @@ class HosDetail extends Component {
                         showPlayButton={false}
                         disableArrowKeys={true}
                         showFullscreenButton={false}
-                        items={images}
+                        items={this.state.image}
                     />
                 </div>
                 <div>
                     {this.setHos()}
                 </div>
                 <div className={cx('time-box')}>
-
                     <LittleMap
                         lat={this.state.current_hos.hlatitude}
                         long={this.state.current_hos.hlongitude}
                     />
-
-
                     {this.setRunningTime()}
                 </div>
+                <div className={cx('review-main')}>가격 정보</div>
+                {this.setPrice()}
                 <div className={cx('review-main')}>리뷰 정보</div>
-
                 <div className={cx('grade-box')}>
                     <div className={cx('grade')}>
                         <HosGrades grade={this.state.grade} />
@@ -239,16 +394,18 @@ class HosDetail extends Component {
                         {this.setAverageGrade()}/5
                         <br />
                         <br />
-
-                        <div className={cx('day')} onClick={() => this.clickReviewList()}>
-                            리뷰 더보기
-                        </div>
-
                     </div>
                 </div>
-                <br />
-                <br />
+                
+                <div className={cx('reviews')}>
+                    <ReviewInfoCard hospitalData={reviewData} key={`newCard${reviewData.hcode}`} />
+                    <div className={cx('more-rev')} onClick={() => this.clickReviewList()}>
+                        리뷰 더보기...
+                        </div>
+                </div>
 
+                <br />
+                <br />
 
                 <div className={cx('button-container')}>
                     <button className={cx('border-button')} onClick={() => this.handleOnclick()}>리뷰 작성하기</button>
@@ -263,13 +420,20 @@ const mapStateToProps = state => {
     return {
         hosInfo: state.review.hosInfo,
         reviewData: state.review.hosReview,
-        userData: state.user.user
+        userData: state.user,
+        photolist: state.hos.hosPhoto,
+        userlike: state.user.likedHos,
+        hos : state.hos,
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         setHosInfo: (id, name, address) => dispatch(review.setHosInfo(id, name, address)),
+        getHosPhoto: (photocode) => dispatch(hos.getHosPhoto(photocode)),
+        getMyLikeHos: (u_id) => dispatch(user.getMyLikeHos(u_id)),
+        getHosReview: (hcode, atoken) => dispatch(review.getHosReview(hcode, atoken)),
+        likeHos: (hcode) => dispatch(hos.likeHos(hcode))
     }
 }
 

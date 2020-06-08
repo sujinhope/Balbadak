@@ -22,7 +22,7 @@ export const GET_HOS_BY_WORD = 'GET_HOS_BY_WORD'
 export const HOS_LIKED = 'HOS_LIKED'
 export const HOS_DISLIKED = 'HOS_DISLIKED'
 export const GET_MY_LIKE_HOS = 'GET_MY_LIKE_HOS'
-
+export const GET_HOS_PHOTO ='GET_HOS_PHOTO'
 // 리뷰
 export const GET_HOS_REVIEW = 'GET_HOS_REVIEW'
 export const GET_MY_REVIEW = 'GET_MY_REVIEW'
@@ -52,3 +52,6 @@ export const GET_REVIEW_REPORT = 'GET_REVIEW_REPORT'
 
 export const REVIEW_GOOD = 'REVIEW_GOOD'
 export const REVIEW_BAD = 'REVIEW_BAD'
+
+// 검색
+export const SEARCH_FLAG = 'SEARCH_FLAG' // 리뷰 검색인지 병원 검색인지 (Data : review or hos)

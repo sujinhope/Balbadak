@@ -6,7 +6,8 @@ import {
   GET_HOS_BY_WORD,
   HOS_LIKED,
   HOS_DISLIKED,
-  GET_MY_LIKE_HOS
+  
+  GET_HOS_PHOTO
 } from './types'
 import apis from '../apis/apis';
 
@@ -138,8 +139,11 @@ export const recieveHosByLoc = (lat, long, page, next, list, category, filter) =
 // 2. 병원 키워드로 검색하기
 export const getHosByWord = (keyword, page, category, filter) => {
   console.log('getHosByword')
+  const lat = 37.504909
+  const long = 127.048463
+  const req = 'hospital/keyword/'+page+'?keyword='+keyword+'&latitude='+lat+'&longtitude='+long
   return dispatch => {
-    return apis.post('hospital/name/'+page+'?keyword='+keyword, null, config)
+    return apis.post(req, null, config)
       .then(res => {
         dispatch(recieveHosByWord(keyword, page, res.data.next, res.data.hospital, category, filter))
         dispatch(setSearchStatus(true))
@@ -160,13 +164,16 @@ export const recieveHosByWord = (keyword, page, next, list, category, filter) =>
 // 1. 즐겨찾기 추가 요청
 export const likeHos = (hcode) => {
   console.log('likeHos')
+  console.log(hcode)
+  console.log(config)
   const favoriteHospital = {
     hcode: hcode
   }
+  console.log(favoriteHospital)
   return dispatch => {
     dispatch(hosLiked(false))
     return apis.post('favoriteHospital/insert', favoriteHospital, config)
-      .then(() => dispatch(hosLiked(true)))
+      .then((res) => dispatch(hosLiked(res.data)))
   }
 }
 
@@ -186,7 +193,7 @@ export const dislikeHos = (hcode, ucode) => {
 
 // 1.1. 즐겨찾기 추가 결과 status에 저장
 export const hosLiked = (code) => {
-  console.log('hosLiked')
+  console.log('hosLiked', code)
   return {
     type: HOS_LIKED,
     code
@@ -204,23 +211,23 @@ export const hosDisliked = (code) => {
 
 
 
-// 3. 유저의 병원 즐겨찾기 조회 요청
-export const getMyLikeHos = (u_id) => {
-  console.log('getMyLikeHos')
-  const body = {
-    u_id: u_id
-  }
-  return dispatch => {
-    return apis.post('favoriteHospital/findById', body, config)
-      .then(res => dispatch(recieveMyLikeHos(res.data)))
-  }
-}
 
-// 3.1. 즐겨찾기 결과 user에 저장
-export const recieveMyLikeHos = (likeHos) => {
-  console.log('recieveMyLikeHos')
+
+// 4. 특정 병원 사진 가져오기
+
+// export const getHosPhoto = (photocode) => {
+//   console.log('photocode')
+//   console.log(photocode)
+//   return dispatch => {
+//     return apis.post('favoriteHospital/findById', photocode, config)
+//       .then(res => dispatch(recieveMyLikeHos(res.data)))
+//   }
+// }
+
+export const recievePhoto = (photocode) => {
+  console.log('recievePhoto :  ',photocode)
   return {
-    type: GET_MY_LIKE_HOS,
-    likeHos
+    type: GET_HOS_PHOTO,
+    photocode
   }
 }

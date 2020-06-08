@@ -15,8 +15,12 @@ class ReviewDetail extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log('ReviewDetail state', this.props.location.state)
+    console.log('ReviewDetail reviewData', this.props.location.state.reviewData)
+    console.log('ReviewDetail careinfoData', this.props.location.state.careinfoData)
     const reviewData = this.props.location.state.reviewData
-    const scorelist =  [reviewData.r_clean, reviewData.r_kindness, reviewData.r_result, reviewData.r_professionality, reviewData.r_overtreatment]
+    const scorelist =  [reviewData.rclean, reviewData.rkindness, reviewData.rresult, reviewData.rprofessionality, reviewData.rovertreatment]
+    // const scorelist =  [3, 4, 5 ,3,1]
     const scorelabel = ['청결', '친절함', '치료결과', '전문성', '적정한 치료']
     const grade = scorelist.map((g, i) => ({name:scorelabel[i], score:g}))
     const totalgrade = this.calcTotalScore(scorelist)
@@ -35,32 +39,35 @@ class ReviewDetail extends React.Component {
   }
 
   render() {
+    console.log('ReviewDetail state', this.props.location.state)
     console.log('ReviewDetail reviewData', this.props.location.state.reviewData)
-    const photo1 = this.props.location.state.reviewData.r_photo1
-    const photo2 = this.props.location.state.reviewData.r_photo2
-    const photo3 = this.props.location.state.reviewData.r_photo3
+    console.log('ReviewDetail careinfoData', this.props.location.state.careinfoData)
+    const photo1 = this.props.location.state.reviewData.rphoto1
+    const photo2 = this.props.location.state.reviewData.rphoto2
+    const photo3 = this.props.location.state.reviewData.rphoto3
     // const photos = photolist.map(
     //   p => (
     //     <img className={cx('photo')} src={p} key={p} alt={p}/>
     //   )
     // )
 
-    const totallike = this.props.location.state.reviewData.r_totalgood
-    const tags = []
+    const totallike = this.props.location.state.reviewData.rtotalgood
+    // const tags = []
 
-    for (const [index, value] of this.props.location.state.reviewData.tags.entries()) {
-      console.log('ReviewDetail value',value)
-      tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
-    }
+    // for (const [index, value] of this.props.location.state.reviewData.tags.entries()) {
+    //   console.log('ReviewDetail value',value)
+    //   tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
+    // }
 
     return (
       <div className={cx('container')}>
         <div className={cx('meta-box')}>
-          {/* <p>{this.props.location.state.reviewData.r_treatmentdata} 진료</p> */}
-          <p>{this.props.location.state.reviewData.r_date} 작성</p>
+          {/* <p>{this.props.location.state.reviewData.rtreatmentdata} 진료</p> */}
+          <p>{this.props.location.state.reviewData.rdate} 작성</p>
         </div>
         <div className={cx('tag-box')}>
-          {tags}
+          태그 없음
+          {/* {tags} */}
         </div>
         <div className={cx('number')}>
           <div className={cx('icon-box')}>
@@ -75,14 +82,14 @@ class ReviewDetail extends React.Component {
         <div className={cx('category')}><p>병원상세평가</p></div>
         <GradeBox 
           grade={this.state.grade} 
-          dojang={this.props.location.state.reviewData.r_revisit} 
+          dojang={this.props.location.state.reviewData.rrevisit} 
           totalgrade={this.state.totalgrade}
           editable={this.state.editablegrade}
           />
         <div className={cx('category')}><p>진료 후기 상세</p></div>
         <div className={cx('basic-box')}>
           <p>
-            {this.props.location.state.reviewData.r_content}
+            {this.props.location.state.reviewData.rcontent}
           </p>
         </div>
         <div className={cx('category')}><p>사진후기</p></div>
@@ -94,7 +101,7 @@ class ReviewDetail extends React.Component {
         </div>
         <div className={cx('category')}><p>비용표</p></div>
         <div className={cx('price-box')}>
-          <ReviewPrice careinfo={this.props.location.state.reviewData.careinfo}/>
+          <ReviewPrice careinfo={this.props.location.state.careinfoData}/>
         </div>
       </div>
     )

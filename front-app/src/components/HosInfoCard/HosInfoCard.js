@@ -6,14 +6,21 @@ import history from'../../history';
 const cx = classNames.bind(styles)
 
 const HosInfoCard = props => {
-  let {hname, haddress, hospitalPicture, hstarrating, hreviewCount} = props.hospitalData;
+  let {hname, haddress, hospitalPicture, htag, hstarrating, hreviewCount} = props.hospitalData;
   const localhos= props.hospitalData;
+  console.log(props.hospitalData)
   function handleOnClick() {
     history.push("/HosDetail", { localhos })
   }
   const hosImage = ((hospitalPicture !== null) && (hospitalPicture.length > 0)) ? 
   <img className={cx('hos-photo')} src={hospitalPicture[1].himage}/>
   : <img className={cx('hos-photo')} src={require('../../assets/imgA.png')}/>
+  
+  const ing = htag.replace('a', '').replace('n', '').split('|')
+  console.log('ing', ing)
+  const tagList = ing[0].split('#').map((i, ii) => (
+  <div key={`${i}_${ii}`} className={cx('tag')}>#{i}</div>
+  ))
   return (
       <div className={props.map === false ? cx('container-box') : cx('container-box', 'map-info-box')} onClick={() => handleOnClick()}>
         <div className={cx('box-header')}>
@@ -30,9 +37,7 @@ const HosInfoCard = props => {
             </div>
 
             <div className={cx('tag-box')}>
-              <div className={cx('tag')} >#중성화</div>
-              <div className={cx('tag')} >#광견병</div>
-              <div className={cx('tag')} >#예방접종</div>
+              {tagList}
             </div>
             <p className={cx('hos-address')}>{haddress}</p>
 

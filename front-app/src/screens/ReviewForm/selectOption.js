@@ -35,7 +35,6 @@ class selectOption extends React.Component {
       searchWord: '',
       currStage: stage,
     }
-    console.log('selectOption', this.state)
   }
 
   async handleEnter(e) {
@@ -78,19 +77,23 @@ class selectOption extends React.Component {
   
 
   async ocrApi(file, recieptBase64) {
-    // const key = process.env.GOOGLE_KEY
-    // await vision.init({ auth: key })
-    // const req = await new vision.Request({
-    //   image: new vision.Image({
-    //     base64: recieptBase64
-    //   }),
-    //   features: [
-    //     new vision.Feature('TEXT_DETECTION', 4)
-    //   ]
-    // })
-    // const res = await vision.annotate(req)
-    // const resJson = res.responses[0]
-    const reciept = new recieptHelper(resJson[0], '스토리동물병원')
+    const key = 'AIzaSyDdgPBg9Srr4GjiCgLxrLvCk9GkzCcn0Qs'
+    await vision.init({ auth: key })
+    const req = await new vision.Request({
+      image: new vision.Image({
+        base64: recieptBase64
+      }),
+      features: [
+        new vision.Feature('TEXT_DETECTION', 4)
+      ]
+    })
+    const res = await vision.annotate(req)
+    console.log(res)
+    const resJson = res.responses[0]
+    console.log(resJson)
+    const reciept = new recieptHelper(resJson, '스토리동물병원')
+
+    // const reciept = new recieptHelper(resJson[0], '스토리동물병원')
     const isDate = reciept.dateInfo.length > 0
     const hasPlace = reciept.isPlaceName
     if (isDate & hasPlace) {
@@ -108,28 +111,50 @@ class selectOption extends React.Component {
     const hosSearch = this.props.hosInfo !== null ? '동물병원 재검색하기' : '동물병원 검색하기'
     const stageDojang = []
     for (let i = 0; i < 3; i++ ) {
-      // console.log(i)
       if (i < this.state.currStage) {stageDojang.push(<td key={i}><Pets/></td>)}
       else {stageDojang.push(<td></td>)}
     }
-    // console.log('stagedojang', stageDojang)
-    const mySearch = this.props.hosSearchList.find(h => h.searchWord === this.state.searchWord)
     let searchResult
-    if (this.props.search === true) {
-      if (mySearch !== null) {
-        searchResult = mySearch.map(l =>
-          <div
-            className={cx('search-list-box')}
-            onClick={() => this.handleHos(l)}
-            key={l.hcode}
-          >
-            <p>{l.hname}</p>
-            <p className={cx('small-text')}>{l.haddress}</p>
+    if (this.props.hosSearchList !== null) {
+      const mySearch = this.props.hosSearchList.find(h => h.searchWord === this.state.searchWord)
+      if (this.props.search === true) {
+        if (mySearch !== null) {
+          searchResult = mySearch.map(l =>
+            <div
+              className={cx('search-list-box')}
+              onClick={() => this.handleHos(l)}
+              key={l.hcode}
+            >
+              <p>{l.hname}</p>
+              <p className={cx('small-text')}>{l.haddress}</p>
+            </div>
+          )} else { searchResult = null }}
+        else {
+          searchResult = null
+        }
+    } else {
+      searchResult = null
+    }
+    
+    let carebody
+    if (this.props.myreciept !== null ) {
+      const carelist = this.props.myreciept.map( (r, i) =>
+        <div key={`ci-${i}`}>{r}</div>
+      )
+      carebody = (
+        <div className={cx('modal')}>
+          <h3 className={cx('modal-header')}>내 영수증 확인하기</h3>
+          <div>
+            {carelist}
           </div>
-        )} else { searchResult = null }}
-      else {
-        searchResult = null
-      }
+        </div>
+      )
+    } else {
+      carebody = null
+    }
+
+
+
 
     const body = (
       <div className={cx('modal')}>
@@ -345,7 +370,7 @@ class selectOption extends React.Component {
           open={isReciepting}
           onClose={() => this.props.reviewIng('isReciepting', !isReciepting)}
         >
-          {/* {reciept} */}
+          {carebody}
         </Modal>
 
       </div>
@@ -356,6 +381,7 @@ class selectOption extends React.Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
+    myreciept: state.review.reciept,
     hosSearchList: state.hos.hosSearchList,
     status: state.status,
     search: state.status.search,

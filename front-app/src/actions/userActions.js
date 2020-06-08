@@ -9,7 +9,8 @@ import {
   GET_PET_DETAIL,
   PET_REGISTERED,
   PET_UPDATED,
-  PET_DELETED
+  PET_DELETED,
+  GET_MY_LIKE_HOS,
 } from './types'
 import apis from '../apis/apis';
 
@@ -247,5 +248,30 @@ export const petDeleted = (code) => {
   return {
     type: PET_DELETED,
     code
+  }
+}
+
+
+
+
+// 6. 유저의 병원 즐겨찾기 조회 요청
+export const getMyLikeHos = (u_id) => {
+  console.log('getMyLikeHos', u_id)
+  console.log(config)
+  const body = {
+    u_id: u_id
+  }
+  return dispatch => {
+    return apis.post('favoriteHospital/findById?uId=' + u_id, null, config)
+      .then(res => dispatch(recieveMyLikeHos(res.data)))
+  }
+}
+
+// 6.1. 즐겨찾기 결과 user에 저장
+export const recieveMyLikeHos = (data) => {
+  console.log('recieveMyLikeHos', data)
+  return {
+    type: GET_MY_LIKE_HOS,
+    data
   }
 }

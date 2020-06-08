@@ -8,48 +8,56 @@ import { connect } from "react-redux";
 
 const ReviewInfoCard = props => {
   
-  // const reviewData = props.hospitalData
-
+  const Data = props.hospitalData
+  const reviewData = props.hospitalData.review
+  const careinfoData = props.hospitalData.careinfo
+  console.log('ReviewInfoCard reviewData', reviewData)
+  console.log('ReviewInfoCard careinfoData', careinfoData)
+  
   const cx = classNames.bind(styles)
   var pet_data = [];
-  // for (var i = 0; i < reviewData.careinfo.length; i++) {
-  //   pet_data.push({
-  //     pet: reviewData.careinfo[i].ci_vet,
-  //     c_name: reviewData.careinfo[i].CareList.c_name
-  //   })
-  // }
+  console.log('ReviewInfoCard careinfoData.length', careinfoData.length)
+  for (var i = 0; i < careinfoData.length; i++) {
+    pet_data.push({
+      pet: careinfoData[i].animal.aspecies,
+      c_name: careinfoData[i].ciName
+    })
+  }
   // const tags = []
   // for (const [index, value] of reviewData.tags.entries()) {
   //   tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
   // }
   var cont = []
 
-  // cont = reviewData.r_content.substr(0, 120)
+  cont = reviewData.rcontent.substr(0, 120)
 
   async function handleClick() {
-    // await review.recieveHosReview(reviewData)
-    // history.push("/ReviewDetail", {reviewData})
+    await review.recieveHosReview(reviewData)
+    // history.push("/ReviewDetail", {Data})
+    history.push("/ReviewDetail", {reviewData, careinfoData})
   }
 
   return (
     <>
       <div className={cx('rev-box')}>
-        {/* <div>
-          {reviewData.r_nickname}
-        </div> */}
-        {/* <div className={cx('tag-box')}>
-          {tags}
-        </div> */}
-        {/* <div>
-          {reviewData.careinfo[0].ci_vet}
+        <div>
+          {/* {reviewData.r_nickname} */}
+          익명
+        </div>
+        <div className={cx('tag-box')}>
+          없어ㅠ
+          {/* {tags} */}
         </div>
         <div>
-          {reviewData.careinfo[0].CareList.c_name}
-        </div> */}
+          {/* {careinfoData[0].animal.aspecies} */}
+        </div>
+        <div>
+          {/* {careinfoData[0].ciName} */}
+        </div>
 
 
         <div>
-          {/* {cont} ... */}
+          {cont} ...
         </div>
         <span onClick= {() => handleClick()}>더보기</span>
         <br />
