@@ -12,6 +12,8 @@ public interface UserService {
 
     public boolean updatePassword(String id, String oldPw, String newPw) throws Exception;
 
+    public boolean updateSms(String uId, Boolean flag) throws Exception;
+
     public List<User> findAll() throws Exception;
 
     public boolean login(String id, String password) throws Exception;
