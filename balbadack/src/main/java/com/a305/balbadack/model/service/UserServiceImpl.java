@@ -142,4 +142,18 @@ public class UserServiceImpl implements UserService{
         return false;
     }
 
+    @Transactional
+    @Override
+    public boolean updateSms(String uId, Boolean flag) throws Exception {
+        
+        try {
+            userRepository.updateSms(uId, flag);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
