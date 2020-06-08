@@ -89,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     // .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                     // .antMatchers("/review/**", "/user/mypage", "/animal/**").hasAnyRole("USER", "STAFF", "ADMIN")
-                    .antMatchers("/review/**", "/user/mypage", "/animal/**", "/hospital/code").hasAuthority("ROLE_USER")//.hasRole("USER")
+                    .antMatchers("/review/**", "/user/mypage", "/animal/**").hasAuthority("ROLE_USER")//.hasRole("USER")
                     .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                     .antMatchers("/hospital/name").hasAuthority("ROLE_USER")//hasAnyRole("STAFF", "ADMIN")
                     .antMatchers("/**", "/user/login", "/user/signup").permitAll()

@@ -17,6 +17,9 @@ public interface HospitalService {
 
   // 병원 전체 조회
   public List<Hospital> searchAll();
+
+  // 병원 코드로 병원 조회
+  public List<Hospital> findByCode(List<Integer> hCodeList);
   
   // 병원 검색하기
   public List<Hospital> findByKeyword(String keyword, Double latitude, Double longtitude);
