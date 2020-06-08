@@ -190,6 +190,18 @@ public class HospitalServicelmpl implements HospitalService {
     return null;
   }
 
+  @Override
+  public List<Hospital> findByCode(final List<Integer> hCodeList) {
+    try {
+      return hospitalRepository.findByhCodeIn(hCodeList);
+    } catch (final Exception e) {
+      e.printStackTrace();
+      System.out.println("병원 코드로 병원 조회 중 오류 발생 함.");
+    }
+    return null;
+  }
+
+
 }
 
     
