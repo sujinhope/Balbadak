@@ -11,7 +11,7 @@ import {
 
 const initializer = {
     user: JSON.parse(sessionStorage.getItem('user')) || {},
-    myPage:{},
+    myPage: JSON.parse(sessionStorage.getItem('myPage')) || {},
     myPets: [],
     myPetDetails: [],
     likedHos: [],

@@ -27,15 +27,16 @@ export const signIn = (user_id, user_pw) => {
   console.log("signin")
   return dispatch => {
     return apis.post('/user/login?uId=' + user_id + '&uPw=' + user_pw)
-      .then(res => dispatch(signedIn(res.data)))
+      .then(res => {
+        dispatch(signedIn(res.data))
+        dispatch(getMyPage())
+      })
   }
 };
 
 // 1.1. 유저 정보를 user 에 저장하기
 export const signedIn = (userInfo) => {
   console.log('signedIn')
-  apis.defaults.headers.common = {'Authorization': `${userInfo.accessToken}`}
-  console.log(apis.defaults.headers)
   window.sessionStorage.setItem('user', JSON.stringify(userInfo))
   return {
     type: SIGNIN,
@@ -54,20 +55,23 @@ export const register = (user_id, user_pw) => {
 }
 
 // 3. 마이페이지 조회 요청하기
-export const getMyPage = (uid) => {
+export const getMyPage = () => {
   console.log('getMyPage')
   return dispatch => {
-    return apis.post('/user/mypage?uId=' + uid)
-      .then(res => dispatch(recieveMyPage(res.data)))
+    return apis.post('/user/mypage', null, config)
+      .then((res) => dispatch(recieveMyPage(res.data)))
   }
 }
 
 // 3.1. 마이페이지 user 에 저장하기
 export const recieveMyPage = (mypage) => {
   console.log('recieveMyPage')
+  console.log(mypage.message)
+  const result = mypage.message
+  window.sessionStorage.setItem('myPage', JSON.stringify(result))
   return {
     type: GET_MY_PAGE,
-    mypage
+    result
   }
 }
 
@@ -76,7 +80,7 @@ export const updateUser = (user) => {
   console.log('updateUser')
   return dispatch => {
     dispatch(userUpdated(false))
-    return apis.post('user/update', user)
+    return apis.post('user/update', user, config)
       .then(() => dispatch(userUpdated(true)))
   }
 }
@@ -94,6 +98,7 @@ export const userUpdated = (code) => {
 export const logOut = () => {
   console.log('logOut')
   window.sessionStorage.removeItem('user')
+  window.sessionStorage.removeItem('myPage')
   apis.defaults.headers.common['Authorization'] = null
   return {
     type: LOGOUT
@@ -106,7 +111,7 @@ export const signOut = (uid) => {
   const body = { uId: uid }
   return dispatch => {
     dispatch(signedOut(false))
-    return apis.post('user/signout', body)
+    return apis.post('user/signout', body, config)
       .then(() => {
         dispatch(signedOut(true))
         dispatch(logOut())
@@ -150,7 +155,7 @@ export const recieveMyPets = (list) => {
 export const getPetDetail = (a_code, u_id) => {
   console.log('getPetDetail')
   return dispatch => {
-    return apis.post('animal/one?a_code=' + a_code + '&u_id=' + u_id)
+    return apis.post('animal/one?a_code=' + a_code + '&u_id=' + u_id, null, config)
       .then(res => dispatch(recievePetDetail(res.data)))
   }
 }
@@ -169,7 +174,7 @@ export const registerPet = (body) => {
   console.log('registerPet')
   return dispatch => {
     dispatch(petRegistered(false))
-    return apis.post('animal/insert', body)
+    return apis.post('animal/insert', body, config)
       .then(() => dispatch(petRegistered(true)))
   }
 }
@@ -188,7 +193,7 @@ export const updatePet = (body) => {
   console.log('updatePet')
   return dispatch => {
     dispatch(petUpdated(false))
-    return apis.post('animal/update', body)
+    return apis.post('animal/update', body, config)
       .then(() => dispatch(petUpdated(true)))
   }
 }
@@ -207,7 +212,7 @@ export const deletePet = (a_code, u_id) => {
   console.log('deletePet')
   return dispatch => {
     dispatch(petDeleted(false))
-    return apis.post('animal/delete?a_code=' + a_code + '&u_id=' + u_id)
+    return apis.post('animal/delete?a_code=' + a_code + '&u_id=' + u_id, null, config)
       .then(() => dispatch(petDeleted(true)))
   }
 }

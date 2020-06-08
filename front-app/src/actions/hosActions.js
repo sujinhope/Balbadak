@@ -9,6 +9,15 @@ import {
 } from './types'
 import apis from '../apis/apis';
 
+let config = sessionStorage.getItem('user') ? {
+  headers: {
+    Authorization: JSON.parse(sessionStorage.getItem('user')).accessToken,
+    'Content-Type':'application/json',
+    'Access-Control-Allow-Origin': '*'
+  }
+} : null
+
+
 // ---------- main.js ---------------------
 export const mainSearch = (searchWord, lat, long, category, filter, page=null) => {
   console.log('mainSearch')
@@ -64,7 +73,7 @@ export const getNearHos = (lat, long, page, mode, category, filter) => {
   const url = 'hospital/location/'+page+ '?latitude=' + lat + '&longtitude=' + long
   const reqURL = mode === null ? url : url + '&mode=' + mode
   return dispatch => {
-    return apis.post(reqURL)
+    return apis.post(reqURL, null, config)
       .then(res => {
         dispatch(recieveHosByLoc(lat, long, page, res.data.next, res.data.hospital, category, filter))
         dispatch(setSearchStatus(true))
@@ -76,7 +85,7 @@ export const getNearHos = (lat, long, page, mode, category, filter) => {
 export const getHosByReview = (lat, long, page, category, filter) => {
   console.log('getHosByReview')
   return dispatch => {
-    return apis.post('hospital/reviewcnt/'+page+ '?latitude=' + lat + '&longtitude=' + long)
+    return apis.post('hospital/reviewcnt/'+page+ '?latitude=' + lat + '&longtitude=' + long, null, config)
       .then(res => {
         dispatch(recieveHosByLoc(lat, long, page, res.data.next, res.data.hospital, category, filter))
         dispatch(setSearchStatus(true))
@@ -88,7 +97,7 @@ export const getHosByReview = (lat, long, page, category, filter) => {
 export const getHosByStar = (lat, long, page, category, filter) => {
   console.log('getHosByStar')
   return dispatch => {
-    return apis.post('hospital/starrating/'+page+ '?latitude=' + lat + '&longtitude=' + long)
+    return apis.post('hospital/starrating/'+page+ '?latitude=' + lat + '&longtitude=' + long, null, config)
       .then(res => {
         dispatch(recieveHosByLoc(lat, long, page, res.data.next, res.data.hospital, category, filter))
         dispatch(setSearchStatus(true))
@@ -110,7 +119,7 @@ export const recieveHosByLoc = (lat, long, page, next, list, category, filter) =
 export const getHosByWord = (keyword, page, category, filter) => {
   console.log('getHosByword')
   return dispatch => {
-    return apis.post('hospital/name/'+page+'?keyword='+keyword)
+    return apis.post('hospital/name/'+page+'?keyword='+keyword, null, config)
       .then(res => {
         dispatch(recieveHosByWord(keyword, page, res.data.next, res.data.hospital, category, filter))
         dispatch(setSearchStatus(true))
@@ -132,12 +141,11 @@ export const recieveHosByWord = (keyword, page, next, list, category, filter) =>
 export const likeHos = (hcode, ucode) => {
   console.log('likeHos')
   const favoriteHospital = {
-    hospital: {hcode: hcode},
-    user: {ucode: ucode}
+    hcode : hcode
   }
   return dispatch => {
     dispatch(hosLiked(false))
-    return apis.post('favoriteHospital/insert', favoriteHospital)
+    return apis.post('favoriteHospital/insert', favoriteHospital, config)
       .then(() => dispatch(hosLiked(true)))
   }
 }
@@ -147,12 +155,11 @@ export const likeHos = (hcode, ucode) => {
 export const dislikeHos = (hcode, ucode) => {
   console.log('dislikeHos')
   const favoriteHospital = {
-    hospital: {hcode: hcode},
-    user: {ucode: ucode}
+    hcode: hcode
   }
   return dispatch => {
     dispatch(hosDisliked(false))
-    return apis.post('favoriteHospital/delete', favoriteHospital)
+    return apis.post('favoriteHospital/delete', favoriteHospital, config)
       .then(() => dispatch(hosDisliked(true)))
   }
 }
@@ -184,7 +191,7 @@ export const getMyLikeHos = (u_id) => {
     u_id: u_id
   }
   return dispatch => {
-    return apis.post('favoriteHospital/findById', body)
+    return apis.post('favoriteHospital/findById', body, config)
       .then(res => dispatch(recieveMyLikeHos(res.data)))
   }
 }

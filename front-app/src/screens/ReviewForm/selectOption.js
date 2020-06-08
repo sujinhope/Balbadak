@@ -155,6 +155,11 @@ class selectOption extends React.Component {
       </div>
     );
     const timerightnow = new Date().toISOString().slice(0, 10)
+
+    function handleClick() {
+      history.push("/smsVer")
+    }
+
     return (
       <div>
         <div className={cx('category')}>
@@ -172,7 +177,7 @@ class selectOption extends React.Component {
         </div>
         <div className={cx('row')}>
           <div className={cx('small-col', 'step-box')}>
-            <div className={cx('box-header')}>
+            <div className={cx('box-header')} onClick= {() => handleClick()}>
               <img
                 className={cx('num-icon', 'one-icon')}
                 src={require('../../assets/one.png')}

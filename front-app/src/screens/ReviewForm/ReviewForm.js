@@ -162,7 +162,7 @@ class ReviewForm extends React.Component {
     const reviewimg = this.state.tempphotos.map(
       (url, i) => {
         return <img
-          className={cx(i == this.state.selectedPhoto ? 'selected-photo' : 'photo')} key={url} src={url} alt='사진후기'
+          className={cx(i === this.state.selectedPhoto ? 'selected-photo' : 'photo')} key={url} src={url} alt='사진후기'
           onClick={() => this.setState({ selectedPhoto: i })}
         />
       }
