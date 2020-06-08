@@ -61,13 +61,14 @@ class ReviewDetail extends React.Component {
 
     return (
       <div className={cx('container')}>
+        <div className={cx('tag-box')}>
+        #{this.props.location.state.reviewData.hospital.hname}
+          {/* {tags} */}
+        </div>
         <div className={cx('meta-box')}>
           {/* <p>{this.props.location.state.reviewData.rtreatmentdata} 진료</p> */}
-          <p>{this.props.location.state.reviewData.rdate} 작성</p>
-        </div>
-        <div className={cx('tag-box')}>
-          태그 없음
-          {/* {tags} */}
+          <p>{this.props.location.state.reviewData.rdate.substr(0, 10)} 작성</p>
+          방문 목적 : {this.props.location.state.reviewData.rpurpose}
         </div>
         <div className={cx('number')}>
           <div className={cx('icon-box')}>

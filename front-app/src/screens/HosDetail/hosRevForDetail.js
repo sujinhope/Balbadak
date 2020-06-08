@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind';
 
-import ReviewInfoCard from '../../components/ReviewInfoCard/ReviewInfoCard';
+import HosReviewInfo from './HosReviewInfo';
 
 const cx = classNames.bind(styles)
 
@@ -149,7 +149,7 @@ class hosRevForDetail extends Component {
         if (true) {
             list = reviewData;
             console.log(list)
-            reviewCards = list.map(r => <ReviewInfoCard hospitalData={r} key={`newCard${r.hcode}`}/>)
+            reviewCards = list.map(r => <HosReviewInfo hospitalData={r} key={`newCard${r.hcode}`}/>)
           } else {
             return (
               reviewCards = null

@@ -10,6 +10,10 @@ const HosInfoCard = props => {
   const localhos= props.hospitalData;
   console.log(props.hospitalData)
   function handleOnClick() {
+    console.log("=====here=====")
+    console.log(localhos)
+    console.log(props.hospitalData)
+    console.log("=====there=====")
     history.push("/HosDetail", { localhos })
   }
   const hosImage = ((hospitalPicture !== null) && (hospitalPicture.length > 0)) ? 

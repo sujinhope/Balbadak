@@ -8,7 +8,6 @@ import { connect } from "react-redux";
 
 const ReviewInfoCard = props => {
   
-  const Data = props.hospitalData
   const reviewData = props.hospitalData.review
   const careinfoData = props.hospitalData.careinfo
   console.log('ReviewInfoCard reviewData', reviewData)
@@ -33,33 +32,29 @@ const ReviewInfoCard = props => {
 
   async function handleClick() {
     await review.recieveHosReview(reviewData)
-    // history.push("/ReviewDetail", {Data})
     history.push("/ReviewDetail", {reviewData, careinfoData})
   }
 
   return (
     <>
       <div className={cx('rev-box')}>
-        <div>
-          {/* {reviewData.r_nickname} */}
-          익명
-        </div>
         <div className={cx('tag-box')}>
-          없어ㅠ
+          #{reviewData.hospital.hname} <br/>
+          #{reviewData.rdate.substr(0, 10)} #도움이 됐어요! {reviewData.rtotalgood}명
           {/* {tags} */}
         </div>
         <div>
+        &nbsp;&nbsp; 방문 목적 : {reviewData.rpurpose}
           {/* {careinfoData[0].animal.aspecies} */}
         </div>
-        <div>
-          {/* {careinfoData[0].ciName} */}
-        </div>
 
 
         <div>
-          {cont} ...
+        &nbsp;&nbsp; {cont} ...
         </div>
-        <span onClick= {() => handleClick()}>더보기</span>
+        <div className={cx('div-center')}>
+        <span onClick= {() => handleClick()}>더보기</span> 
+        </div>
         <br />
       </div>
     </>    
@@ -73,4 +68,3 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default connect(mapDispatchToProps)(ReviewInfoCard);
-// export default ReviewInfoCard

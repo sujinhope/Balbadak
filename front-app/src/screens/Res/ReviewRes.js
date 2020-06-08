@@ -211,7 +211,7 @@ class ReviewRes extends Component {
       
       list = resInfo.list
       console.log('ReviewRes list', list)
-      reviewCards = list.map(r => <ReviewInfoCard hospitalData={r} key={`newCard${r.review.hospital.hcode}`}/>)
+      reviewCards = list.map(r => <ReviewInfoCard hospitalData={r} key={`newCard${r.review.rcode}`}/>)
       // reviewCards = {reviewData}.reviewData.map(r => <ReviewInfoCard hospitalData={r} key={`newCard${r.hcode}`}/>)
     } else {
       return (

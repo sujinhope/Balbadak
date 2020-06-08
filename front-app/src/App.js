@@ -29,19 +29,15 @@ const App = () => {
           <div>
             <Route path="/" exact component={Main} />
             <Route path="/Main" exact component={Main} />
-
             <Route path="/SignIn" exact component={SignIn} />
             <Route path="/SignUp" exact component={SignUp} />
             <Route path="/MyPage" exact component={MyPage} />
             <Route path="/MyPetList" exact component={MyPetList} />
-
             <Route path="/ResTab" exact component={ResTab} />
             <Route path="/HosRes" exact component={HosRes} />
             <Route path="/ReviewRes" exact component={ReviewRes} />
-
             <Route path="/HosDetail" exact component={HosDetail} />
             <Route path="/ReviewDetail" exact component={ReviewDetail} />
-
             <Route path="/SelectOption" exact component={SelectOption} />
             <Route path="/ReviewForm" exact component={ReviewForm} />
             <Route path="/hosRevForDetail" exact component={hosRevForDetail} />

@@ -17,7 +17,7 @@ import imgA from "../../assets/imgA.png";
 import fav1 from '../../assets/fav1.png';
 import fav2 from '../../assets/fav2.png';
 import ReviewInfoCard from '../../components/ReviewInfoCard/ReviewInfoCard';
-import BigMap from '../Res/BigMap';
+import HosReviewInfo from './HosReviewInfo';
 const reviewData = {
     r_no: 0,
     u_id: 'aestas',
@@ -80,8 +80,8 @@ const cx = classNames.bind(styles)
 class HosDetail extends Component {
     componentDidMount() {
         this.state.current_hos = this.props.location.state.localhos;
-        
-        console.log(this.props.location.state.localhos)
+        // console.log(this.props.location.state.localhos)
+        this.props.getHosReview(this.state.current_hos.hcode);
         review.setHosInfo(this.state.current_hos.hcode, this.state.current_hos.hname, this.state.current_hos.haddress);
     }
     constructor(props) {
@@ -121,12 +121,12 @@ class HosDetail extends Component {
             chk_fav: true,
         })
         await this.props.getMyLikeHos('psj');
-        console.log('======done=====')
-        console.log(this.props.userlike)
+        // console.log('======done=====')
+        // console.log(this.props.userlike)
         for(var i = 0; i < this.props.userlike.length; i++) {
-            console.log('======11111111111=====')
-            console.log(this.props.location.state.localhos.hcode)
-            console.log(this.props.userlike[i].hcode)
+            // console.log('======11111111111=====')
+            // console.log(this.props.location.state.localhos.hcode)
+            // console.log(this.props.userlike[i].hcode)
             if(this.props.location.state.localhos.hcode === this.props.userlike[i].hcode) {
                 this.setState({
                     cur_fav: true,
@@ -139,23 +139,23 @@ class HosDetail extends Component {
         
     }
     setImage() {
-        console.log(this.props.location.state.localhos)
+        // console.log(this.props.location.state.localhos)
         var hosPic = this.props.location.state.localhos.hospitalPicture;
         if (!hosPic) {
             this.state.image.push({
                 original: imgA,
                 thumbnail: imgA
             })
-            console.log("imgA: ", imgA);
+            // console.log("imgA: ", imgA);
         }
         else {
-            console.log(hosPic)
+            // console.log(hosPic)
             for (var i = 0; i < hosPic.length; i += 2) {
                 this.state.image.push({
                     original: hosPic[i].himage,
                     thumbnail: hosPic[i + 1].himage
                 })
-                console.log(i, "/ ", hosPic[i].image)
+                // console.log(i, "/ ", hosPic[i].image)
             }
         }
     }
@@ -205,7 +205,7 @@ class HosDetail extends Component {
     setHos() {
         if (this.state.current_hos.length < 1) {
             this.state.current_hos = this.props.location.state.localhos
-            console.log(this.state.current_hos.hname)
+            // console.log(this.state.current_hos.hname)
         }
         return (
             <>
@@ -239,7 +239,7 @@ class HosDetail extends Component {
         return avg / 4;
     }
     clickReviewList() {
-        console.log(this.state.current_hos.hcode)
+        // console.log(this.state.current_hos.hcode)
         this.props.getHosReview(this.state.current_hos.hcode)
         history.push(`/hosRevForDetail`)
     }
@@ -284,11 +284,21 @@ class HosDetail extends Component {
 
         )
     }
-    gotoBigMap() {
 
-    }
     setReviewList() {
-
+        // console.log(this.props.reviewData.length)
+        if(this.props.reviewData.length > 0) {
+            return(
+                <div>
+                    <HosReviewInfo hospitalData={this.props.reviewData} key={`newCard${this.props.reviewData.hcode}`} />
+                    <div className={cx('more-rev')} onClick={() => this.clickReviewList()}>
+                        리뷰 더보기...
+                        </div>
+                </div>
+                
+            )
+        }
+        else return null
     }
     setRunningTime() {
         if (!this.state.current_hos.hmonday) {
@@ -345,10 +355,14 @@ class HosDetail extends Component {
             </div>
         );
     }
+    
     render() {
-        console.log(this.props.userData)
+        // console.log(this.props.userData)
         if (this.state.image.length < 1) {
             this.setImage();
+        }
+        if(this.props.reviewData.length > 0) {
+
         }
         console.log(this.props)
         if(!this.state.chk_fav) {
@@ -359,7 +373,7 @@ class HosDetail extends Component {
         }
         if (!this.props.hosInfo) {
             this.props.setHosInfo(this.state.current_hos.hcode, this.state.current_hos.hname, this.state.current_hos.haddress);
-            console.log(this.props.hosInfo)
+            // console.log(this.props.hosInfo)
         }
         return (
             <div className={cx('container')}>
@@ -398,10 +412,8 @@ class HosDetail extends Component {
                 </div>
                 
                 <div className={cx('reviews')}>
-                    <ReviewInfoCard hospitalData={reviewData} key={`newCard${reviewData.hcode}`} />
-                    <div className={cx('more-rev')} onClick={() => this.clickReviewList()}>
-                        리뷰 더보기...
-                        </div>
+                    {this.setReviewList()}
+                    
                 </div>
 
                 <br />
