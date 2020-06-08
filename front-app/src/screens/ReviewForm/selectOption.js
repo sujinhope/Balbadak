@@ -1,18 +1,22 @@
 import React from "react";
-import styles from './mystyle.module.scss';
-import classNames from 'classnames/bind'
+import history from "../../history";
+
 import Modal from '@material-ui/core/Modal';
-import SearchIcon from '@material-ui/icons/Search'
-import Pets from '@material-ui/icons/Pets'
-import EmojiPeople from '@material-ui/icons/EmojiPeople'
+
 import recieptHelper from '@ming822/ocr-reciept-helper'
 import vision from 'react-cloud-vision-api'
+import SmsVer from './smsVer.js'
 import resJson from './test2.json'
 
 import { connect } from 'react-redux'
-import { review, hos } from '../../actions'
-import history from "../../history";
+import { review, user, hos } from '../../actions'
 
+import SearchIcon from '@material-ui/icons/Search'
+import Pets from '@material-ui/icons/Pets'
+import EmojiPeople from '@material-ui/icons/EmojiPeople'
+
+import styles from './mystyle.module.scss';
+import classNames from 'classnames/bind'
 
 
 const cx = classNames.bind(styles)
@@ -20,32 +24,20 @@ const cx = classNames.bind(styles)
 class selectOption extends React.Component {
   constructor(props) {
     super(props);
-    // const stages = [
-    //   {key: 'auth', val: props.status.isAuthorized}, 
-    //   {key: 'hos', val: props.status.hosSelected},
-    //   {key: 'reciept', val: props.status.hasReciept}
-    // ]
-    const stages = [
-      {key: 'auth', val: false}, 
-      {key: 'hos', val: false},
-      {key: 'reciept', val: false}
-    ]
-    const i = stages.findIndex(e => e.val === false)
-    const currStage = i !== -1? i : 3
+    let stage
+    if (props.user.myPage.usms === false) { stage = 0} 
+    else if (props.hosInfo === null) { stage = 1 } 
+    else if (review.reciept === null) { stage = 2 } 
+    else { stage = 3 }
+
     this.state = {
       reciept: null,
       searchWord: '',
-      stages: stages,
-      currStage: currStage
+      currStage: stage,
     }
+    console.log('selectOption', this.state)
   }
 
-  // async getCurrStage() {
-  //   const i = this.state.stages.findIndex(e => e.val === false)
-  //   const currStage = i!== -1? i : 3
-  //   console.log('curr', currStage)
-  //   await this.setState({currStage:currStage})
-  // }
   async handleEnter(e) {
     if (e.key === 'Enter') {
       this.showList()
@@ -53,18 +45,16 @@ class selectOption extends React.Component {
   }
 
   async showList() {
-    await this.props.getHosSearchList()
+    await this.props.getHosSearchList(this.state.searchWord)
   }
 
   async handleHos(l) {
-    await this.props.selectHos(true, l.name)
-    await this.props.setHosInfo(l.id, l.name, l.address)
-    await this.props.toggleSearchModal(true)
+    await this.props.setHosInfo(l.hcode, l.hname, l.haddress)
     await this.setState({ searchWord: '' })
   }
 
   async handleHosFirst(e) {
-    if (!this.props.status.hosSelected) {
+    if (!this.props.hosInfo === null) {
       alert('동물 병원을 먼저 검색해주세요')
       e.preventDefault()
     }
@@ -75,6 +65,17 @@ class selectOption extends React.Component {
     await this.setState({ reciept: files[0] })
     await this.processFile(files[0])
   }
+
+  async processFile(file) {
+    const reader = new FileReader()
+    const context = this
+    await reader.readAsDataURL(file)
+    reader.onload = await async function () {
+      console.log(file, reader.result)
+      await context.ocrApi(file, reader.result)
+    } 
+  }
+  
 
   async ocrApi(file, recieptBase64) {
     // const key = process.env.GOOGLE_KEY
@@ -94,40 +95,41 @@ class selectOption extends React.Component {
     const hasPlace = reciept.isPlaceName
     if (isDate & hasPlace) {
       await this.props.uploadReciept(file, isDate, hasPlace, reciept.priceTable)
-      await this.props.hasReciept(true)
+      await this.props.reviewIng('isReciepting', true)
     } else {
       alert('영수증에 날짜 정보나 병원 이름이 보이지 않다냥 8-8')
     }
   }
 
-  async processFile(file) {
-    const reader = new FileReader()
-    const context = this
-    await reader.readAsDataURL(file)
-    reader.onload = await async function () {
-      await context.ocrApi(file, reader.result)
-    }
-  }
+
 
   render() {
-    const hosSearch = this.props.status.hosSelected ? '동물병원 재검색하기' : '동물병원 검색하기'
-
-    const stageDojang = this.state.stages.map((s,i) =>
-      s === true? <td key={i}><Pets/></td> : <td></td> 
-    )
-
-    const searchResult = this.props.hosSearchList ?
-      this.props.hosSearchList.map(l =>
-        <div
-          className={cx('search-list-box')}
-          onClick={() => this.handleHos(l)}
-          key={l.id}
-        >
-          <p>{l.name}</p>
-          <p className={cx('small-text')}>{l.address}</p>
-        </div>
-      )
-      : null
+    const {isSearching, isSms, isReciepting } = this.props
+    const hosSearch = this.props.hosInfo !== null ? '동물병원 재검색하기' : '동물병원 검색하기'
+    const stageDojang = []
+    for (let i = 0; i < 3; i++ ) {
+      // console.log(i)
+      if (i < this.state.currStage) {stageDojang.push(<td key={i}><Pets/></td>)}
+      else {stageDojang.push(<td></td>)}
+    }
+    // console.log('stagedojang', stageDojang)
+    const mySearch = this.props.hosSearchList.find(h => h.searchWord === this.state.searchWord)
+    let searchResult
+    if (this.props.search === true) {
+      if (mySearch !== null) {
+        searchResult = mySearch.map(l =>
+          <div
+            className={cx('search-list-box')}
+            onClick={() => this.handleHos(l)}
+            key={l.hcode}
+          >
+            <p>{l.hname}</p>
+            <p className={cx('small-text')}>{l.haddress}</p>
+          </div>
+        )} else { searchResult = null }}
+      else {
+        searchResult = null
+      }
 
     const body = (
       <div className={cx('modal')}>
@@ -156,10 +158,6 @@ class selectOption extends React.Component {
     );
     const timerightnow = new Date().toISOString().slice(0, 10)
 
-    function handleClick() {
-      history.push("/smsVer")
-    }
-
     return (
       <div>
         <div className={cx('category')}>
@@ -177,7 +175,7 @@ class selectOption extends React.Component {
         </div>
         <div className={cx('row')}>
           <div className={cx('small-col', 'step-box')}>
-            <div className={cx('box-header')} onClick= {() => handleClick()}>
+            <div className={cx('box-header')}>
               <img
                 className={cx('num-icon', 'one-icon')}
                 src={require('../../assets/one.png')}
@@ -261,35 +259,51 @@ class selectOption extends React.Component {
             </div>
             <div className={cx('decor-bottom')}></div>
           </div>
-
+          
         </div>
-        {/* <div className={this.state.currStage === 0 ? cx('action-box') : cx('hide')}>
-          <div className={this.props.status.isAuthorized? cx('hide') : cx('border-button', 'smaller-btn')}>
+        <div className={this.state.currStage === 0 ? cx('action-box') : cx('hide')}>
+          <div className={this.props.user.myPage.usms === true? 
+            cx('hide') : cx('border-button', 'smaller-btn')}
+            onClick={() => this.props.reviewIng('isSms', true)}>
             핸드폰 인증하기
           </div>
-          <div className={this.props.status.isAuthorized ? cx('auth-box') : cx('hide')}>
+          
+          <div className={this.props.user.myPage.usms === true? cx('auth-box') : cx('hide')}>
             <EmojiPeople/>
             <div>
               <p>{this.props.user.email} 님</p>
               <p>인증되었다냥!</p>
             </div>            
           </div>
-          <div className={cx('border-button', 'xsmall-btn')}>
+          <div 
+            className={this.props.user.myPage.usms === true? cx('border-button', 'xsmall-btn') : cx('hide')}
+            onClick={() => this.setState({currStage: this.state.currStage + 1})}
+          >
             다음
           </div>
         </div>
+
         <div className={this.state.currStage === 1 ? cx('action-box') : cx('hide')}>
-          <div className={cx('border-button', 'smaller-btn')} onClick={() => this.props.toggleSearchModal(this.props.status.isSearching)}>
+          <div className={cx('border-button', 'smaller-btn')} 
+          onClick={() => this.props.reviewIng('isSearching', true)}>
             {hosSearch}
           </div>
-          <div className={this.props.status.hosSelected ? cx('hos-box') : cx('hide')}>
-            <p>{this.props.hosInfo.name}</p>
-            <p className={cx('small-text')}>{this.props.hosInfo.address}</p>
+          <div className={this.props.hosInfo !== null ? cx('hos-box') : cx('hide')}>
+            <p>{this.props.hosInfo !== null ? this.props.hosInfo.name : null}</p>
+            <p className={cx('small-text')}>{this.props.hosInfo !== null ? this.props.hosInfo.address : null}</p>
+          </div>
+          <div 
+            className={this.props.hosInfo !== null? cx('border-button', 'xsmall-btn') : cx('hide')}
+            onClick={() => this.setState({currStage: this.state.currStage + 1})}
+          >
+            다음
           </div>
         </div>
+
         <div className={this.state.currStage === 2 ? cx('action-box') : cx('hide')}>
           <div
-            className={cx('border-button', 'upload-btn-wrapper', 'smaller-btn')}
+           className={this.state.reciept !== null? cx('hide') :
+            cx('border-button', 'upload-btn-wrapper', 'smaller-btn')}
           >
             <p>영수증 인증하기</p>
             <input
@@ -300,18 +314,40 @@ class selectOption extends React.Component {
               onChange={this.handleReciept.bind(this)}
             />
           </div>
+          <div 
+            className={this.state.reciept !== null? cx('border-button', 'xsmall-btn') : cx('hide')}
+            onClick={() => this.setState({currStage: this.state.currStage + 1})}
+          >
+            다음
+          </div>
         </div>
+
         <div className={this.state.currStage === 3 ? cx('action-box') : cx('hide')}>
           <div className={cx('border-button', 'smaller-btn')} onClick={() => history.push("/ReviewForm")}>
             리뷰 쓰러가기
           </div>
-        </div> */}
+        </div>
+
         <Modal
-          open={this.props.status.isSearching}
-          onClose={() => this.props.toggleSearchModal(this.props.status.isSearching)}
+          open={isSms}
+          onClose={() => this.props.reviewIng('isSms', !isSms)}
+        >
+          <SmsVer/>
+        </Modal>
+        <Modal
+          open={isSearching}
+          onClose={() => this.props.reviewIng('isSearching', !isSearching)}
         >
           {body}
         </Modal>
+
+        <Modal
+          open={isReciepting}
+          onClose={() => this.props.reviewIng('isReciepting', !isReciepting)}
+        >
+          {/* {reciept} */}
+        </Modal>
+
       </div>
     );
   }
@@ -319,14 +355,18 @@ class selectOption extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.users,
-    hosSearchList: state.hos.hosByWord,
+    user: state.user,
+    hosSearchList: state.hos.hosSearchList,
     status: state.status,
-    hosInfo: state.review.hosInfo
+    search: state.status.search,
+    hosInfo: state.review.hosInfo,
+    isSearching: state.status.isSearching,
+    isSms: state.status.isSms,
+    isReciepting: state.status.isReciepting,
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     uploadReciept: (file, dateIs, hasHos, items) => dispatch(review.uploadReciept(
       file,
@@ -335,10 +375,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       items
     )),
     setHosInfo: (id, name, address) => dispatch(review.setHosInfo(id, name, address)),
-    getHosSearchList: () => dispatch(review.getHosSearchList()),
-    toggleSearchModal: () => dispatch(review.toggleSearchModal()),
-    selectHos: (selected, hosName) => dispatch(review.selectHos(selected, hosName)),
-    hasReciept: (has) => dispatch(review.hasReciept(has))
+    getHosSearchList: (searchWord) => dispatch(hos.getHosSearchList(searchWord)),
+    hasReciept: (has) => dispatch(review.hasReciept(has)),
+    reviewIng : (now, code) => dispatch(user.reviewIng(now, code))
   }
 }
 

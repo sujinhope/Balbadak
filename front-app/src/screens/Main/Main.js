@@ -38,7 +38,7 @@ class Main extends React.Component {
           <div className={cx('logo-box')} align="center">
             <div className={cx('phrase')}>
               <p><span>발</span>품팔지않고</p>
-              <p>바로 <span>만</span>나는</p>
+              <p><span>바</span>로 만나는</p>
               <p>애니멀 <span>닥</span>터</p>
             </div>
             <img 

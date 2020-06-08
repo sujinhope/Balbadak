@@ -27,13 +27,8 @@ const ReviewInfoCard = props => {
   // cont = reviewData.r_content.substr(0, 120)
 
   async function handleClick() {
-<<<<<<< HEAD
-    await review.recieveHosReview(reviewData)
-    history.push("/ReviewDetail", {reviewData})
-=======
     // await review.recieveHosReview(reviewData)
     // history.push("/ReviewDetail", {reviewData})
->>>>>>> d793c46c0fee1e0653cd803c4429a76cdc3b48e4
   }
 
   return (

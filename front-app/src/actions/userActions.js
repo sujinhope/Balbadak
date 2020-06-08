@@ -1,4 +1,5 @@
 import {
+  REVIEW_ACTION,
   SIGNIN, // 유저 
   GET_MY_PAGE,
   USER_UPDATED,
@@ -12,6 +13,8 @@ import {
 } from './types'
 import apis from '../apis/apis';
 
+
+
 // ------------- user 관련 action --------------
 
 let config = sessionStorage.getItem('user') ? {
@@ -22,9 +25,20 @@ let config = sessionStorage.getItem('user') ? {
   }
 } : null
 
+export const reviewIng = ( now, code) => {
+  console.log('reviewIng')
+  return {
+    type: REVIEW_ACTION,
+    now, code
+  }
+}
+
+
+
 // 1. 로그인 요청하기
 export const signIn = (user_id, user_pw) => {
   console.log("signin")
+  console.log(user_id, user_pw)
   return dispatch => {
     return apis.post('/user/login?uId=' + user_id + '&uPw=' + user_pw)
       .then(res => {
@@ -49,7 +63,7 @@ export const register = (user_id, user_pw) => {
   console.log('register')
   const body = { uid: user_id, upw: user_pw }
   return dispatch => {
-    return apis.post('/user/signup', body)
+    return apis.post('user/signup', body, config)
       .then(() => dispatch(signIn(user_id, user_pw)))
   }
 }
@@ -57,6 +71,13 @@ export const register = (user_id, user_pw) => {
 // 3. 마이페이지 조회 요청하기
 export const getMyPage = () => {
   console.log('getMyPage')
+  config = sessionStorage.getItem('user') ? {
+    headers: {
+      Authorization: JSON.parse(sessionStorage.getItem('user')).accessToken,
+      'Content-Type':'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  } : null
   return dispatch => {
     return apis.post('/user/mypage', null, config)
       .then((res) => dispatch(recieveMyPage(res.data)))
@@ -66,7 +87,7 @@ export const getMyPage = () => {
 // 3.1. 마이페이지 user 에 저장하기
 export const recieveMyPage = (mypage) => {
   console.log('recieveMyPage')
-  console.log(mypage.message)
+  // console.log(mypage.message)
   const result = mypage.message
   window.sessionStorage.setItem('myPage', JSON.stringify(result))
   return {
@@ -76,12 +97,15 @@ export const recieveMyPage = (mypage) => {
 }
 
 // 4. 회원정보 수정 요청하기
-export const updateUser = (user) => {
+export const updateUser = (sms) => {
   console.log('updateUser')
   return dispatch => {
     dispatch(userUpdated(false))
-    return apis.post('user/update', user, config)
-      .then(() => dispatch(userUpdated(true)))
+    return apis.post('user/sms?sms='+sms, config)
+      .then(() => {
+        dispatch(userUpdated(true))
+        dispatch(getMyPage())
+      })
   }
 }
 

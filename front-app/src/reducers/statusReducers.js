@@ -1,4 +1,5 @@
 import {
+  REVIEW_ACTION,
   USER_UPDATED,
   PET_REGISTERED,
   PET_UPDATED,
@@ -38,12 +39,17 @@ const initializer = {
   hosByWord: [],
   hosByReview: [],
   hosByStar: [],
+  isSearching: false,
+  isSms: false,
+  isReciepting: false,
 }
 
 
 
 export default (state = initializer, action) => {
   switch (action.type) {
+    case REVIEW_ACTION:
+      return {...state, [action.now]: action.code}
     case USER_UPDATED:
       return { ...state, userUpdated: action.code }
     case PET_REGISTERED:

@@ -1,4 +1,5 @@
 import {
+  NAME_LIST,
   MAIN_SEARCH,
   SEARCH_STATUS,
   GET_HOS_BY_LOC,
@@ -16,6 +17,25 @@ let config = sessionStorage.getItem('user') ? {
     'Access-Control-Allow-Origin': '*'
   }
 } : null
+
+export const getHosSearchList = (searchword) => {
+  console.log('getHosSearchList')
+  return dispatch =>{
+    dispatch(setSearchStatus(false))
+    return apis.post('hospital/name?Name='+searchword, null, config)
+    .then(res => {
+      dispatch(recieveHosSearchList(searchword, res.data))
+      dispatch(setSearchStatus(true))
+    })
+  }
+}
+
+export const recieveHosSearchList = (searchWord, list) => {
+  return {
+    type:NAME_LIST,
+    searchWord, list
+  }
+}
 
 
 // ---------- main.js ---------------------
@@ -138,10 +158,10 @@ export const recieveHosByWord = (keyword, page, next, list, category, filter) =>
 
 // ------------- 병원 즐겨찾기 기능 관련 action --------------
 // 1. 즐겨찾기 추가 요청
-export const likeHos = (hcode, ucode) => {
+export const likeHos = (hcode) => {
   console.log('likeHos')
   const favoriteHospital = {
-    hcode : hcode
+    hcode: hcode
   }
   return dispatch => {
     dispatch(hosLiked(false))

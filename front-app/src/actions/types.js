@@ -1,4 +1,5 @@
 // 유저와 펫
+export const REVIEW_ACTION = "REVIEW_ACTION";
 export const SIGNIN = "SIGNIN";
 export const LOGOUT = "LOGOUT";
 export const SIGNOUT = 'SIGNOUT';
@@ -12,6 +13,7 @@ export const PET_UPDATED = 'PET_UPDATED'
 export const PET_DELETED = 'PET_DELETED'
 
 // 병원
+export const NAME_LIST = 'NAME_LIST'
 export const MAIN_SEARCH = 'MAIN_SEARCH'
 export const SEARCH_STATUS = 'SEARCH_STATUS'
 export const GET_HOS_BY_LOC = 'GET_HOS_BY_LOC'

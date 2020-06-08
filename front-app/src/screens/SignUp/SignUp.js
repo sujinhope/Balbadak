@@ -42,7 +42,12 @@ class SignUp extends Component {
         if (this.state.password.length < 8 ) {
             return false
         } else {
-            return true
+            if (this.state.password === this.state.password2) {
+                return true
+            } else {
+                return false
+            }
+            
         }
     }
     async handleSummit() {
@@ -53,6 +58,7 @@ class SignUp extends Component {
             const validEmail = this.ValidateEmail()
             const validPwd = this.validatePwd()
             if ( ( validEmail === true ) & ( validPwd === true ) ) {
+                console.log(this.state.username, this.state.password)
                 await this.props.register(this.state.username, this.state.password)
                 window.alert('회원가입이 완료되었다냥')
                 history.push('/')
@@ -72,7 +78,7 @@ class SignUp extends Component {
                         type="text" 
                         className={cx('input-box')} 
                         placeholder="이메일을 입력해주세요" 
-                        onChange={(e) => this.setState({email: e.target.value})}></input>
+                        onChange={(e) => this.setState({username: e.target.value})}></input>
                     <p>비밀번호</p>
                     <input 
                         type="text" 
