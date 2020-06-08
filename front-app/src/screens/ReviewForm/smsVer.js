@@ -19,9 +19,13 @@ class smsVer extends Component {
   async onSubmit () {
     console.log('smsVer this.state.message', this.state.message)
     const number = '+82' + this.state.message.substr(1, 10);
+    console.log('before')
     const recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha');
+    console.log('middle')
     const res = await firebase.auth().signInWithPhoneNumber(number, recaptcha)
+    console.log('after')
     const code = prompt('Enter the otp', '')
+    console.log('final')
     const final = res.confirm(code).catch(() => {alert('예상치 못한 에러가 발생했습니다. 다시 시도해주세요')})
     if (final) {
       await this.props.updateUser(true)
@@ -55,6 +59,7 @@ class smsVer extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user.user,
+    userUpdated: state.userUpdated,
     myPage: state.user.myPage,
     isSearching: state.status.isSearching,
     isSms: state.status.isSms,
