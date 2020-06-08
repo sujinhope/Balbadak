@@ -1,13 +1,8 @@
 package com.a305.balbadack.config;
 
-import com.a305.balbadack.model.dto.CustomUserdetails;
-import com.a305.balbadack.security.*;
-import com.a305.balbadack.model.dto.Role;
 import com.a305.balbadack.model.service.CustomUserDetailService;
 import com.a305.balbadack.security.JwtAuthenticationEntryPoint;
 import com.a305.balbadack.security.JwtAuthenticationFilter;
-
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +19,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +31,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
 
     @Autowired
     CustomUserDetailService customUserdetailsService;
@@ -76,6 +75,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .csrf().disable()
                     .exceptionHandling()
                         .authenticationEntryPoint(unauthorizedHandler)
@@ -88,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     // .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                     // .antMatchers("/review/**", "/user/mypage", "/animal/**").hasAnyRole("USER", "STAFF", "ADMIN")
-                    .antMatchers("/review/**", "/user/mypage", "/animal/**", "/hospital/code").hasAuthority("ROLE_USER")//.hasRole("USER")
+                    .antMatchers("/review/**", "/user/mypage", "/animal/**").hasAuthority("ROLE_USER")//.hasRole("USER")
                     .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                     .antMatchers("/hospital/name").hasAuthority("ROLE_USER")//hasAnyRole("STAFF", "ADMIN")
                     .antMatchers("/**", "/user/login", "/user/signup").permitAll()
@@ -109,5 +110,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣음.
                 // .and()
                 // .authenticationProvider(authProvider); // 로그인에서 authenticated 호출하면 연결
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // - (3)
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

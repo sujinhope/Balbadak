@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import HosInfoCard from "../../components/HosInfoCard/HosInfoCard";
 import { hos } from '../../actions'
-// import InfiniteScroll from "react-infinite-scroller";
+import InfiniteScroll from 'react-infinite-scroller';
 
 // 검색이 mainSearchBar 또는 main 페이지에서 발생했을 때
 // 검색이 발생
@@ -19,7 +19,7 @@ import { hos } from '../../actions'
 class HosRes extends Component {
 	constructor(props) {
 		super(props);
-		const { searchWord, lat, long, category, filter} = props.hos.mainSearch
+		const { searchWord, lat, long, category, filter } = props.hos.mainSearch
 		console.log(searchWord, lat, long, category, filter)
 		if (props.hos[filter].length !== 0) {
 			if (category === 'hosByLoc') {
@@ -27,7 +27,7 @@ class HosRes extends Component {
 					props.mainSearch(searchWord, lat, long, category, filter)
 				}
 			} else {
-				if(!props.hos[filter].find(s => (s.keyword === searchWord))) {
+				if (!props.hos[filter].find(s => (s.keyword === searchWord))) {
 					props.mainSearch(searchWord, lat, long, category, filter)
 				}
 			}
@@ -37,29 +37,45 @@ class HosRes extends Component {
 
 	}
 
+	async getMore(page) {
+		const { searchWord, lat, long, category, filter } = this.props.hos.mainSearch
+		await this.props.mainSearch(searchWord, lat, long, category, filter, page)
+	}
+
 	render() {
-		let result, hosCards;
-		const { searchWord, lat, long, category, filter} = this.props.hos.mainSearch
+		let resInfo, result, hosCards;
+		const { searchWord, lat, long, category, filter } = this.props.hos.mainSearch
 		if (this.props.search === true) {
 			if (category === 'hosByLoc') {
-				result = this.props.hos[filter].find(s => (s.lat === lat) & (s.long === long)).list
+				resInfo = this.props.hos[filter].find(s => (s.lat === lat) & (s.long === long))
+				result = resInfo.list
 				hosCards = result.map(
-					h => <HosInfoCard map={false} hospitalData={h} key={h.hcode}/>
+					h => <HosInfoCard map={false} hospitalData={h} key={h.hcode} />
 				)
 			} else {
-				result = this.props.hos[filter].find(s => (s.keyword === searchWord)).list
+				resInfo = this.props.hos[filter].find(s => (s.keyword === searchWord))
+				result = resInfo.list
 				hosCards = result.map(
-					h => <HosInfoCard map={false} hospitalData={h} key={h.hcode}/>
+					h => <HosInfoCard map={false} hospitalData={h} key={h.hcode} />
 				)
 			}
+			return (
+				<InfiniteScroll
+					pageStart={0}
+					loadMore={() => this.getMore(resInfo.page + 1)}
+					hasMore={resInfo.next}
+					loader={<div className="loader" key={0}>Loading ...</div>}
+					useWindow={false}
+				>
+					{hosCards}
+				</InfiniteScroll>
+			)
 		} else {
 			hosCards = null
+			return (
+			<div>{hosCards}</div>
+			)
 		}
-		return (
-			<div>
-				{hosCards}
-			</div>
-		);
 	}
 }
 
@@ -72,7 +88,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		mainSearch: (searchWord, lat, long, category, filter) => dispatch(hos.mainSearch(searchWord, lat, long, category, filter))
+		mainSearch: (searchWord, lat, long, category, filter, page) => dispatch(hos.mainSearch(searchWord, lat, long, category, filter, page))
 	};
 };
 

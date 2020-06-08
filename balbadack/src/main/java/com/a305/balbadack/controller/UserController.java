@@ -1,5 +1,6 @@
 package com.a305.balbadack.controller;
 
+import com.a305.balbadack.model.dto.ChangePassword;
 import com.a305.balbadack.model.dto.User;
 import com.a305.balbadack.model.service.JwtService;
 import com.a305.balbadack.model.service.UserService;
@@ -102,6 +103,7 @@ public class UserController {
 		
 		user.setUPw(passwordEncoder.encode(user.getUPw()));
 		user.setUCode(1);
+		user.setUDeleted(false);
 
         try {
 			Boolean check = userService.create(user);
@@ -176,21 +178,63 @@ public class UserController {
 
 	@ApiOperation("마이페이지 조회")
 	@PostMapping("/mypage")
-	public ResponseEntity<Map<String, Object>> mypage(@RequestParam String uId) {
+	public ResponseEntity<Map<String, Object>> mypage() {
 		
 		String jwtId = jwtService.getIdFromJwt();
-		if(!uId.equals(jwtId)) {
-			return handleFail("잘못된 접근입니다.", HttpStatus.BAD_REQUEST);
-		}
 		
 		User user = null;
         try {
-			user = userService.findById(uId);
+			user = userService.findById(jwtId);
 			user.setUPw(null);
             return handleSuccess(user);
         } catch (Exception e) {
             return handleFail(e.toString(), HttpStatus.BAD_REQUEST);
         }
+	} 
+
+	@ApiOperation("휴대폰 인증 여부 변경")
+	@PostMapping("/sms")
+	public ResponseEntity<Map<String, Object>> password(@RequestParam boolean sms) {
+		
+		String uId = jwtService.getIdFromJwt();
+
+		boolean flag = false;
+
+		try {
+			flag = userService.updateSms(uId, sms);
+		} catch (Exception e) {
+			return handleFail(e.toString(), HttpStatus.BAD_REQUEST);
+		}
+
+		if(flag) {
+			return handleSuccess("휴대폰 인증을 완료하였습니다.");
+		} else {
+			return handleFail("휴대폰 인증에 실패하였습니다.", HttpStatus.BAD_REQUEST);
+		}
+	
+	}
+
+	@ApiOperation("비밀번호 변경")
+	@PostMapping("/password")
+	public ResponseEntity<Map<String, Object>> password(@RequestBody ChangePassword changePassword) {
+		
+		String id = changePassword.getId();
+		String oldPw = changePassword.getPassword();
+		String newPw = changePassword.getNewPassword();
+
+		boolean flag = false;
+		try {
+			flag = userService.updatePassword(id, oldPw, newPw);
+		} catch (Exception e) {
+			return handleFail(e.toString(), HttpStatus.BAD_REQUEST);
+		}
+
+		if(flag) {
+			return handleSuccess("비밀번호를 변경하였습니다.");
+		} else {
+			return handleFail("비밀번호 변경에 실패하였습니다.", HttpStatus.BAD_REQUEST);
+		}
+	
 	}
 
 }

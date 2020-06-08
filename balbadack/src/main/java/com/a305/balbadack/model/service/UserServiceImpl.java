@@ -8,6 +8,7 @@ import com.a305.balbadack.model.dto.User;
 import com.a305.balbadack.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     // 회원가입
     @Override
@@ -102,6 +106,54 @@ public class UserServiceImpl implements UserService{
             throw new Exception("전체 회원정보 조회 중 오류가 발생했습니다.");
         }
         return user;
+    }
+
+    @Transactional
+    @Override
+    public boolean updatePassword(String id, String oldPw, String newPw) throws Exception {
+        
+        if(checkPassword(id, oldPw)) {
+
+            try {
+                newPw = passwordEncoder.encode(newPw);
+                userRepository.updatePassword(id, newPw);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new Exception("비밀번호 변경 중 오류가 발생했습니다.");
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean checkPassword(String id, String rawPassword) throws Exception {
+        User user = findById(id);
+
+        String encodedPassword = user.getUPw();
+
+        if(passwordEncoder.matches(rawPassword, encodedPassword)) {
+            System.out.println("비밀번호 맞음");
+            return true;
+        } else {
+            System.out.println("비번 틀림");
+        }
+
+        return false;
+    }
+
+    @Transactional
+    @Override
+    public boolean updateSms(String uId, Boolean flag) throws Exception {
+        
+        try {
+            userRepository.updateSms(uId, flag);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
 }

@@ -4,6 +4,7 @@ import {
   PET_UPDATED,
   PET_DELETED,
   SEARCH_STATUS,
+  REVIEW_SEARCH_STATUS,
   HOS_LIKED,
   HOS_DISLIKED,
   REVIEW_GOOD,
@@ -21,6 +22,7 @@ const initializer = {
   petUpdated: null,
   petDeleted: null,
   search: false,
+  reviewSearch: false,
   hosLiked: null,
   hosDisLiked: null,
   reviewGood: null,
@@ -52,6 +54,8 @@ export default (state = initializer, action) => {
       return { ...state, petDeleted: action.code }
     case SEARCH_STATUS:
       return { ...state, search: action.code }
+    case REVIEW_SEARCH_STATUS:
+      return { ...state, reviewSearch: action.code }
     case HOS_LIKED:
       return { ...state, hosLiked: action.code }
     case HOS_DISLIKED:

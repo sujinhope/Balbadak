@@ -14,20 +14,28 @@ import apis from '../apis/apis';
 
 // ------------- user 관련 action --------------
 
+let config = sessionStorage.getItem('user') ? {
+  headers: {
+    Authorization: JSON.parse(sessionStorage.getItem('user')).accessToken,
+    'Content-Type':'application/json',
+    'Access-Control-Allow-Origin': '*'
+  }
+} : null
+
 // 1. 로그인 요청하기
 export const signIn = (user_id, user_pw) => {
   console.log("signin")
   return dispatch => {
     return apis.post('/user/login?uId=' + user_id + '&uPw=' + user_pw)
-      .then(res => dispatch(signedIn(res.data, res)))
+      .then(res => dispatch(signedIn(res.data)))
   }
 };
 
 // 1.1. 유저 정보를 user 에 저장하기
-export const signedIn = (userInfo, res) => {
-  console.log(res)
+export const signedIn = (userInfo) => {
   console.log('signedIn')
-  apis.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`
+  apis.defaults.headers.common = {'Authorization': `${userInfo.accessToken}`}
+  console.log(apis.defaults.headers)
   window.sessionStorage.setItem('user', JSON.stringify(userInfo))
   return {
     type: SIGNIN,
@@ -121,14 +129,16 @@ export const signedOut = (code) => {
 // 1. 유저의 모든 펫 정보 요청하기
 export const getMyPets = (u_id) => {
   console.log('getMyPets')
+
   return dispatch => {
-    return apis.post('animal/mycompanion/all?u_id=' + u_id)
+    return apis.post('animal/mycompanion/all?u_id=' + u_id, null, config)
       .then(res => dispatch(recieveMyPets(res.data)))
   }
 }
 
 // 1.1. 유저의 모든 펫 정보 user_info 에 저장하기
 export const recieveMyPets = (list) => {
+  console.log(list)
   console.log('recieveMyPets')
   return {
     type: GET_MY_PETS,

@@ -22,11 +22,19 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query("select u from user u where u.id=:id")
     User findByUserId(String id);
 
+    @Modifying
+    @Query(value = "update user u set u.u_pw=:pw where u.u_id=:id", nativeQuery = true)
+    void updatePassword(String id, String pw);
+
     // public User findBy
 
     @Modifying
     @Query(value = "update User u set u.deleted = 1 where u.id=:id", nativeQuery = true)
     void userDeleted(@Param("id") String id);
+
+    @Modifying
+    @Query(value = "update user u set u.u_sms = :flag where u.u_id=:uId", nativeQuery = true)
+	void updateSms(String uId, Boolean flag);
 
     // @Query(value = "select  from user u where u.id=:id", nativeQuery = true)
 	// UserDetails findUserdetailsByUid(String id);

@@ -19,9 +19,9 @@ class ResTab extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			curr: 'hos',
+			curr: 'res',
 			near: true,
-			filter: 'nearHos',
+			// filter: 'nearHos',
 			map: false
 		}
 	}
@@ -82,7 +82,6 @@ class ResTab extends React.Component {
 	render() {
 		const { curr, near, map } = this.state
 		const { filter } = this.props.hos.mainSearch
-		console.log('mapmpa', map)
 		const floating = (map === true) ? <ListIcon/> : <MapIcon/>
 		let resDisplay
 		if (curr === 'hos') {
@@ -92,7 +91,9 @@ class ResTab extends React.Component {
 			<div className={cx('res-page')}>
 				<div className={cx('tab-container')}>
 					<div className={curr === 'hos' ? 
-						cx('cate-btn', 'passive-cate') : cx('cate-btn')}><p>REVIEW</p></div>
+						cx('cate-btn', 'passive-cate') : cx('cate-btn')}
+						onClick={() => this.setState({curr:'review'})}
+						><p>REVIEW</p></div>
 					<div className={cx('spacer')}></div>
 					<div className={curr === 'hos' ?
 						cx('cate-btn') : cx('cate-btn', 'passive-cate')}

@@ -6,13 +6,13 @@ import ThumbIcon from '@material-ui/icons/ThumbUpAlt';
 import SportsIcon from '@material-ui/icons/Sports';
 import classNames from 'classnames/bind';
 import { connect } from "react-redux";
-import { review } from '../../actions';
+// import { review } from '../../actions';
 
 const cx = classNames.bind(styles)
 
 class ReviewDetail extends React.Component {
   componentDidMount () {
-    review.getHosReview(10)
+    // review.getHosReview(10)
   }
 
   constructor(props) {
@@ -36,20 +36,31 @@ class ReviewDetail extends React.Component {
   }
 
   render() {
-    const photolist = this.props.reviewData.r_photo.split(',')
-    const photos = photolist.map(
-      p => (
-        <img className={cx('photo')} src={p} key={p} alt={p}/>
-      )
-    )
+    console.log('reviewData?? ', this.props.reviewData)
+    const photo1 = this.props.reviewData.r_photo1
+    const photo2 = this.props.reviewData.r_photo2
+    const photo3 = this.props.reviewData.r_photo3
+    console.log("photo2 :  " , photo2)
+    // const photos = photolist.map(
+    //   p => (
+    //     <img className={cx('photo')} src={p} key={p} alt={p}/>
+    //   )
+    // )
 
-    const totallike = this.props.reviewData.Like.length
+    const totallike = this.props.reviewData.r_totalgood
     const tags = []
 
+    // for (const [index, value] of this.props.reviewData.tags.map()) {
+    //   console.log(value)
+    //   tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
+    // }
     for (const [index, value] of this.props.reviewData.tags.entries()) {
       console.log(value)
       tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
     }
+    // const tags = this.props.reviewData.tags.map((value, index) => (
+    //   <div className={cx('tag')} key={index}>#{value}</div>
+    // ))
 
     return (
       <div className={cx('container')}>
@@ -85,7 +96,10 @@ class ReviewDetail extends React.Component {
         </div>
         <div className={cx('category')}><p>사진후기</p></div>
         <div className={cx('photo-box')}>
-          {photos}
+          {/* {photos} */}
+          <img className={cx('photo')} src={photo1} key={photo1} alt="사진1"/>
+          <img className={cx('photo')} src={photo2} key={photo2} alt="사진2"/>
+          <img className={cx('photo')} src={photo3} key={photo3} alt="사진3"/>
         </div>
         <div className={cx('category')}><p>비용표</p></div>
         <div className={cx('price-box')}>
@@ -97,8 +111,9 @@ class ReviewDetail extends React.Component {
 }
 
 const mapStateToProps = state => {
+  console.log('reviewData!?!?!?!? ', state.review.hosReview)
   return {
-    reviewData: state.review.hosReview,
+    reviewData: state.review.hosReview
   };
 };
 

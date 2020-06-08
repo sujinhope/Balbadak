@@ -32,9 +32,32 @@ public class Hospital{
   
   @Transient
   private Double dist;
-  
+
   @Transient
 	private List<HospitalPicture> hospitalPicture;
+
+  // 점수
+  @Transient
+  private Double ScoreResult;
+
+  @Transient
+  private Double ScoreKindness;
+
+  @Transient
+  private Double ScoreClean;
+
+  @Transient
+  private Double ScoreProfessionality;
+  
+  @Transient
+  private Double ScoreOvertreatment;
+  
+  // 적절한 진료 
+  // @Transient
+  // private List<Integer> detailScore;
+
+  // @OneToMany(mappedBy="hospital")
+  // private List<Review> review;
 
   // @OneToMany(mappedBy="hospital")
   // private List<Review> review;

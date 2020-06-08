@@ -38,7 +38,7 @@ const reviewData = {
     r_treatmentdata: '2020-05-10',
     r_date: '2020-05-10',
     tags: ['중성화수술이다옹', "고양이", "15kg", '정기적', "친절", "풀장", "감사"],
-    r_overtreatement: 1,
+    r_overtreatment: 1,
     r_kindness: 4,
     r_result: 4,
     r_clean: 4,
@@ -100,7 +100,7 @@ class HosDetail extends Component {
             grade: [
                 {
                     name: '적절한 치료',
-                    score: reviewData.r_overtreatement
+                    score: reviewData.r_overtreatment
                 },
                 {
                     name: '친절함',

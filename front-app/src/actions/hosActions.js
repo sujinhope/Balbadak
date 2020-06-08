@@ -10,16 +10,17 @@ import {
 import apis from '../apis/apis';
 
 // ---------- main.js ---------------------
-export const mainSearch = (searchWord, lat, long, category, filter) => {
+export const mainSearch = (searchWord, lat, long, category, filter, page=null) => {
   console.log('mainSearch')
+  page = page === null ? 0 : page
   return dispatch => {
     dispatch(setSearchStatus(false))
     dispatch(setMainSearch(searchWord, lat, long, category, filter))
     if (category === 'hosByLoc') {
       if (filter === 'hosByReview') {
-        return dispatch(getHosByReview(lat, long, 0, null, category, filter))
+        return dispatch(getHosByReview(lat, long, page, null, category, filter))
       } else if (filter === 'hosByStar') {
-        return dispatch(getHosByStar(lat, long, 0, null, category, filter))
+        return dispatch(getHosByStar(lat, long, page, null, category, filter))
       } else {
         let mode
         if (filter === 'nearHosByReview') {
@@ -30,10 +31,10 @@ export const mainSearch = (searchWord, lat, long, category, filter) => {
           mode = null
         }
         console.log('mode----------', mode)
-        return dispatch(getNearHos(lat, long, 0, mode, category, filter))
+        return dispatch(getNearHos(lat, long, page, mode, category, filter))
       }
     } else {
-      return dispatch(getHosByWord(searchWord, 0, category, filter))
+      return dispatch(getHosByWord(searchWord, page, category, filter))
     }
   }
 }

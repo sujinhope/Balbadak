@@ -95,55 +95,69 @@ public class ReviewController {
 
     @ApiOperation("모든 리뷰 가져오기")
     @PostMapping("/findAll")
-    public List<Review> findAll() {
+    public List<ReviewCareinfo> findAll() {
         List<Review> re = reviewService.findAll();
+        List<ReviewCareinfo> reviewcareinfos = new LinkedList<>();
 
         for (int i = 0; i < re.size(); i++) {
             re.get(i).setHospital(null);
             re.get(i).setUser(null);
             System.out.println(re.get(i));
+            List<Careinfo> careinfos = careinfoService.findByR_code(re.get(i).getRCode());
+            reviewcareinfos.add(new ReviewCareinfo(re.get(i), careinfos));
         }
-        return re;
+
+        return reviewcareinfos;
     }
 
     @ApiOperation("리뷰 하나 가져오기")
     @PostMapping("/findOne")
-    public Review findOne(@RequestParam int r_code) {
+    public ReviewCareinfo findOne(@RequestParam int r_code) {
         Review re = reviewService.findOne(r_code);
 
         re.setHospital(null);
         re.setUser(null);
         System.out.println(re);
 
-        return re;
+        List<Careinfo> careinfos = careinfoService.findByR_code(r_code);
+
+        ReviewCareinfo reviewcareinfo = new ReviewCareinfo(re, careinfos);
+
+        return reviewcareinfo;
     }
 
     @ApiOperation("리뷰 병원별로 가져오기")
     @PostMapping("/findByHospital")
-    public List<Review> findByHospital(@RequestParam int h_code) {
+    public List<ReviewCareinfo> findByHospital(@RequestParam int h_code) {
         List<Review> re = reviewService.findByHospital(h_code);
+        List<ReviewCareinfo> reviewcareinfos = new LinkedList<>();
         
         for (int i = 0; i < re.size(); i++) {
             re.get(i).setHospital(null);
             re.get(i).setUser(null);
             System.out.println(re.get(i));
+            List<Careinfo> careinfos = careinfoService.findByR_code(re.get(i).getRCode());
+            reviewcareinfos.add(new ReviewCareinfo(re.get(i), careinfos));
         }
 
-        return re;
+        return reviewcareinfos;
     }
 
     @ApiOperation("리뷰 회원별로 가져오기")
     @PostMapping("/findByUser")
-    public List<Review> findByUser(@RequestParam String u_id) {
+    public List<ReviewCareinfo> findByUser(@RequestParam String u_id) {
         List<Review> re = reviewService.findByUser(u_id);
+        List<ReviewCareinfo> reviewcareinfos = new LinkedList<>();
 
         for (int i = 0; i < re.size(); i++) {
             re.get(i).setHospital(null);
             re.get(i).setUser(null);
             System.out.println(re.get(i).toString());
+            List<Careinfo> careinfos = careinfoService.findByR_code(re.get(i).getRCode());
+            reviewcareinfos.add(new ReviewCareinfo(re.get(i), careinfos));
         }
         
-        return re;
+        return reviewcareinfos;
     }
 
     @ApiOperation("목적 List 가져오기")
@@ -155,7 +169,7 @@ public class ReviewController {
 
     @ApiOperation("리뷰 검색하기 {'yes' or 'no'} / {'star' or 'good' or 'price'} / {keyword}")
     @PostMapping("/findByKeyword/{distance}/{filter}/{keyword}")
-    public List<Review> findByKeyword(@PathVariable String distance, @PathVariable String filter, @PathVariable String keyword, @RequestParam Double latitude, @RequestParam Double longtitude){
+    public List<ReviewCareinfo> findByKeyword(@PathVariable String distance, @PathVariable String filter, @PathVariable String keyword, @RequestParam Double latitude, @RequestParam Double longtitude){
 
         System.out.println("입력된 검색어 : " + keyword);
         StringTokenizer st = new StringTokenizer(keyword);
@@ -226,11 +240,14 @@ public class ReviewController {
             });
         }
 
+        List<ReviewCareinfo> reviewcareinfos = new LinkedList<>();
         for (Review review : reviews) {
             System.out.println("최종 review .rcode는 " + review.getRCode());
+            List<Careinfo> careinfos = careinfoService.findByR_code(review.getRCode());
+            reviewcareinfos.add(new ReviewCareinfo(review, careinfos));
         }
 
-        return reviews;
+        return reviewcareinfos;
     }
 
     @ApiOperation("리뷰 수정")
@@ -399,7 +416,7 @@ public class ReviewController {
             List<Integer> hcodes = new LinkedList<>();
             for (String word : keywords) {
                 System.out.println("keyword는 " + word);
-                List<Hospital> H = hospitalService.findByKeyword(word);
+                List<Hospital> H = hospitalService.findByKeyword(word, latitude, longtitude);
                 for (Hospital hospital : H) {
                     if(hcodes.contains(hospital.getHCode())){
                         hcodes.add(hospital.getHCode());
@@ -523,7 +540,7 @@ public class ReviewController {
             List<Integer> hcodes = new LinkedList<>();
             for (String word : keywords) {
                 System.out.println("keyword는 " + word);
-                List<Hospital> H = hospitalService.findByKeyword(word);
+                List<Hospital> H = hospitalService.findByKeyword(word, latitude, longtitude);
                 for (Hospital hospital : H) {
                     if(hcodes.contains(hospital.getHCode())){
                         hcodes.add(hospital.getHCode());

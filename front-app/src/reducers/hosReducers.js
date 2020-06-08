@@ -20,7 +20,6 @@ const initializer = {
   hosByStar: [],
 }
 
-let updated;
 
 export default (state = initializer, action) => {
   switch (action.type) {
@@ -36,16 +35,18 @@ export default (state = initializer, action) => {
         }
       }
     case GET_HOS_BY_LOC:
-      if (state[action.filter].some(s => 
-        (s.lat === action.lat) && (s.long === action.long) && (s.page !== action.page))) {
-        return {
-          ...state,
-          [action.filter] : state[action.filter].map(p => {
-            if ((p.lat === action.lat) & (p.long === action.long)) {
-              return { ...p, next:p.next, list: p.list.concat(...action.list) }
-            } else {return p}
-          })
-        }
+      if (state[action.filter].some(s => (s.lat === action.lat) && (s.long === action.long) )) {
+          if (state[action.filter].some(s => (s.page === action.page))) { return state } 
+          else {
+            return {
+              ...state,
+              [action.filter] : state[action.filter].map(p => {
+                if ((p.lat === action.lat) & (p.long === action.long)) {
+                  return { ...p, page:action.page, next:action.next, list: p.list.concat(...action.list) }
+                } else { return p }
+              })
+            }
+          }
       } else {
         return {
           ...state,
@@ -54,16 +55,18 @@ export default (state = initializer, action) => {
         }
       }
     case GET_HOS_BY_WORD:
-      if (state.hosByWord.some(s => 
-        (s.keyword === action.keyword) && (s.page !== action.page))) {
-        return {
-          ...state,
-          hosByWord: state.hosByWord.map(p => {
-            if (p.keyword === action.keyword) {
-              return { ...p, next:p.next, list: action.list } 
-            } else { return p }
-          })
-        }
+      if (state.hosByWord.some(s => (s.keyword === action.keyword))) {
+          if (state[action.filter].some(s => (s.page === action.page))) { return state }
+          else {
+            return {
+              ...state,
+              hosByWord: state.hosByWord.map(p => {
+                if (p.keyword === action.keyword) {
+                  return { ...p, page:action.page, next:p.next, list: action.list } 
+                } else { return p }
+              })
+            }
+          }
       } else {
         return {
           ...state,
