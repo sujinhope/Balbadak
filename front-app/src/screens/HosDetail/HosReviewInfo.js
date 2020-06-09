@@ -10,21 +10,23 @@ const HosReviewInfo = props => {
   
   const reviewData = props.hospitalData
     console.log("====here===")
+    console.log(reviewData.careinfo)
   const cx = classNames.bind(styles)
   var pet_data = [];
   for (var i = 0; i < reviewData.careinfo.length; i++) {
     pet_data.push({
       pet: reviewData.careinfo[i].ci_vet,
-      c_name: reviewData.careinfo[i].CareList.c_name
+      c_name: reviewData.careinfo[i].ciName
     })
   }
   const tags = []
-  for (const [index, value] of reviewData.tags.entries()) {
-    tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
-  }
+  // for (const [index, value] of reviewData.tags.entries()) {
+  //   tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
+  // }
   var cont = []
 
-  cont = reviewData.r_content.substr(0, 120)
+  console.log(reviewData.review)
+  cont = reviewData.review.rcontent.substr(0, 120)
 
   async function handleClick() {
     await review.recieveHosReview(reviewData)
@@ -44,7 +46,7 @@ const HosReviewInfo = props => {
           {reviewData.careinfo[0].ci_vet}
         </div>
         <div>
-          {reviewData.careinfo[0].CareList.c_name}
+          {reviewData.careinfo[0].ciName}
         </div>
 
 

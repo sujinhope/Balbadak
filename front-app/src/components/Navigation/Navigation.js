@@ -7,7 +7,8 @@ import classNames from 'classnames/bind';
 import history from '../../history';
 import MainSearchBar from '../MainSearchBar/MainSearchBar'
 import { useLocation } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+
 
 const cx = classNames.bind(styles)
 
@@ -26,17 +27,18 @@ const Navigation = (props) => {
   <div className={cx('nav-icon-box')}><PersonIcon onClick={()=> history.push('/SignIn')}/></div> :
   <div className={cx('nav-icon-box')}><PersonIcon onClick={()=> history.push('/MyPage')}/></div>
     
-  
+  console.log('navigation')
+  console.log(location.pathname);
   if (location === '/MyPage') {
     location = '마이페이지'
   } else if (location === '/HosDetail') {
-    location = props.status.hosName + '병원 상세페이지'
+    location = props.status.hosName + ' 병원 상세페이지'
   } else if (location === '/ReviewDetail') {
-    location = [props.status.hosName, '후기 열람'].join(' ')
+    location = [props.status.hosName, ' 후기 열람'].join(' ')
   } else if (location === '/SelectOption') {
-    location = [props.status.hosName, '후기 작성'].join(' ')
+    location = [props.status.hosName, ' 후기 작성'].join(' ')
   } else if (location === '/ReviewForm') {
-    location = [props.status.hosName, '후기 작성'].join(' ')
+    location = [props.status.hosName, ' 후기 작성'].join(' ')
     rightBtn = <div className={cx('nav-icon-box')}><SendIcon  style={{ fontSize: 19 }}/></div>
     leftBtn = <ChevronLeftIcon onClick={() => checkCancel()} />  
   } else if (location === '/LogIn') {

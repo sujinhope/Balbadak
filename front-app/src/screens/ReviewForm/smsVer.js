@@ -26,7 +26,7 @@ class smsVer extends Component {
     console.log('after')
     const code = prompt('Enter the otp', '')
     console.log('final')
-    const final = res.confirm(code).catch(() => {alert('예상치 못한 에러가 발생했습니다. 다시 시도해주세요')})
+    const final = res.confirm(code)
     if (final) {
       await this.props.updateUser(true)
       await this.props.reviewIng('isSms', false)

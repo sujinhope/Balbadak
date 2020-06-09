@@ -331,6 +331,13 @@ $title: 'BMEULJIRO';
   margin-bottom: 10px;
 }
 
+.reciept-body {
+  @include flex-center();
+  @include flex-vertical();
+  align-items: center;
+  width: 100%;
+}
+
 .auth-body {
   @include flex-center();
   @include flex-vertical();

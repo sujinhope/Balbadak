@@ -11,7 +11,7 @@ import {
 
 const initializer = {
     user: JSON.parse(sessionStorage.getItem('user')) || {},
-    myPage: JSON.parse(sessionStorage.getItem('myPage')) || {},
+    myPage: JSON.parse(sessionStorage.getItem('myPage')) || null,
     myPets: [],
     myPetDetails: [],
     likedHos: [],
@@ -24,7 +24,7 @@ export default (state = initializer, action) => {
         case SIGNOUT || LOGOUT:
             return {...state, user: {}}
         case GET_MY_PAGE:
-            return { ...state, myPage: action.mypage }
+            return { ...state, myPage: action.result }
         case GET_MY_PETS:
             return { ...state, myPets: action.list }
         case GET_PET_DETAIL:

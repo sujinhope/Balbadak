@@ -55,3 +55,7 @@ export const REVIEW_BAD = 'REVIEW_BAD'
 
 // 검색
 export const SEARCH_FLAG = 'SEARCH_FLAG' // 리뷰 검색인지 병원 검색인지 (Data : review or hos)
+
+
+//status
+export const SELECT_HOS = 'SELECT_HOS'

@@ -52,13 +52,17 @@ class HosRes extends Component {
 				hosCards = result.map(
 					h => <HosInfoCard map={false} hospitalData={h} key={h.hcode} />
 				)
+			} else if (resInfo !== null)  {
+					resInfo = this.props.hos[filter].find(s => (s.keyword === searchWord))
+					result = resInfo.list
+					hosCards = result.map(
+						h => <HosInfoCard map={false} hospitalData={h} key={h.hcode} />
+					)
 			} else {
-				resInfo = this.props.hos[filter].find(s => (s.keyword === searchWord))
-				result = resInfo.list
-				hosCards = result.map(
-					h => <HosInfoCard map={false} hospitalData={h} key={h.hcode} />
-				)
+				hosCards = null
 			}
+
+			
 			const next = ((resInfo.next === 0) || (resInfo.next === false)) ? false : true
 			return (
 				<InfiniteScroll

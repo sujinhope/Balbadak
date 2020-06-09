@@ -5,11 +5,11 @@ import styles from './mystyle.module.scss';
 import ThumbIcon from '@material-ui/icons/ThumbUpAlt';
 import SportsIcon from '@material-ui/icons/Sports';
 import classNames from 'classnames/bind';
-
+import history from '../../history';
 const cx = classNames.bind(styles)
 
 class ReviewDetail extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     // review.getHosReview(10)
   }
 
@@ -19,10 +19,10 @@ class ReviewDetail extends React.Component {
     console.log('ReviewDetail reviewData', this.props.location.state.reviewData)
     console.log('ReviewDetail careinfoData', this.props.location.state.careinfoData)
     const reviewData = this.props.location.state.reviewData
-    const scorelist =  [reviewData.rclean, reviewData.rkindness, reviewData.rresult, reviewData.rprofessionality, reviewData.rovertreatment]
+    const scorelist = [reviewData.rclean, reviewData.rkindness, reviewData.rresult, reviewData.rprofessionality, reviewData.rovertreatment]
     // const scorelist =  [3, 4, 5 ,3,1]
     const scorelabel = ['청결', '친절함', '치료결과', '전문성', '적정한 치료']
-    const grade = scorelist.map((g, i) => ({name:scorelabel[i], score:g}))
+    const grade = scorelist.map((g, i) => ({ name: scorelabel[i], score: g }))
     const totalgrade = this.calcTotalScore(scorelist)
     this.state = {
       grade: grade,
@@ -33,11 +33,14 @@ class ReviewDetail extends React.Component {
   }
 
   calcTotalScore(scorelist) {
-    const totalscore = Math.round(((scorelist.reduce((a, b) => a + b, 0) / scorelist.length) + Number.EPSILON) * 100)/100
-    const totalgrade = [{name:'평균평점', score:totalscore}]
+    const totalscore = Math.round(((scorelist.reduce((a, b) => a + b, 0) / scorelist.length) + Number.EPSILON) * 100) / 100
+    const totalgrade = [{ name: '평균평점', score: totalscore }]
     return totalgrade
   }
-
+  gotoHosDetail() {
+    let localhos = this.props.location.state.reviewData.hospital
+    history.push(`/hosDetail`, {localhos})
+  }
   render() {
     console.log('ReviewDetail state', this.props.location.state)
     console.log('ReviewDetail reviewData', this.props.location.state.reviewData)
@@ -62,7 +65,10 @@ class ReviewDetail extends React.Component {
     return (
       <div className={cx('container')}>
         <div className={cx('tag-box')}>
-        #{this.props.location.state.reviewData.hospital.hname}
+          <div onClick = {() => this.gotoHosDetail()} >
+            #{this.props.location.state.reviewData.hospital.hname}
+          </div>
+
           {/* {tags} */}
         </div>
         <div className={cx('meta-box')}>
@@ -72,38 +78,39 @@ class ReviewDetail extends React.Component {
         </div>
         <div className={cx('number')}>
           <div className={cx('icon-box')}>
-            <SportsIcon fontSize="small"/>
+            <SportsIcon fontSize="small" />
             <p>신고다옹</p>
           </div>
           <div className={cx('icon-box')}>
-            <ThumbIcon fontSize="small"/>
+            <ThumbIcon fontSize="small" />
             <p>좋다옹 {totallike}</p>
           </div>
         </div>
         <div className={cx('category')}><p>병원상세평가</p></div>
-        <GradeBox 
-          grade={this.state.grade} 
-          dojang={this.props.location.state.reviewData.rrevisit} 
+        <GradeBox
+          grade={this.state.grade}
+          dojang={this.props.location.state.reviewData.rrevisit}
           totalgrade={this.state.totalgrade}
           editable={this.state.editablegrade}
-          />
+        />
         <div className={cx('category')}><p>진료 후기 상세</p></div>
         <div className={cx('basic-box')}>
+          * 이 리뷰는 예시입니다.
           <p>
             {this.props.location.state.reviewData.rcontent}
           </p>
         </div>
-        <div className={cx('category')}><p>사진후기</p></div>
-        <div className={cx('photo-box')}>
-          {/* {photos} */}
-          <img className={cx('photo')} src={photo1} key={photo1} alt="사진1"/>
+        {/* <div className={cx('category')}><p>사진후기</p></div> */}
+        {/* <div className={cx('photo-box')}> */}
+        {/* {photos} */}
+        {/* <img className={cx('photo')} src={photo1} key={photo1} alt="사진1"/>
           <img className={cx('photo')} src={photo2} key={photo2} alt="사진2"/>
           <img className={cx('photo')} src={photo3} key={photo3} alt="사진3"/>
-        </div>
-        <div className={cx('category')}><p>비용표</p></div>
+        </div> */}
+        {/* <div className={cx('category')}><p>비용표</p></div>
         <div className={cx('price-box')}>
           <ReviewPrice careinfo={this.props.location.state.careinfoData}/>
-        </div>
+        </div> */}
       </div>
     )
   }
@@ -111,6 +118,5 @@ class ReviewDetail extends React.Component {
 
 
 export default ReviewDetail;
- 
 
- 
+

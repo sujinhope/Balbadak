@@ -26,7 +26,15 @@ const initializer = {
 export default (state = initializer, action) => {
   switch (action.type) {
     case NAME_LIST:
-      if (state.hosSearchList.some(s => (s.searchWord === action.searchWord))) {
+      if (state.hosSearchList === null ) {
+        return {
+          ...state,
+          hosSearchList: [{
+            searchWord: action.searchWord,
+            list : action.list
+          }]
+        }
+      } else if (state.hosSearchList.some(s => (s.searchWord === action.searchWord))) {
         return state
       } else {
         return {
