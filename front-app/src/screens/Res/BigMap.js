@@ -53,7 +53,7 @@ class BigMap extends Component {
 			}
 			const script = document.createElement('script');
 			script.async = true;
-			script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=e78c23fbd9656d2db2f5df69fb693cfb&autoload=false";
+			script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=abda9de9258a6427770543e851f1db53&autoload=false";
 			document.head.appendChild(script);
 			script.onload = () => {
 				kakao.maps.load(() => {
