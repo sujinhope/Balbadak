@@ -2,30 +2,27 @@ import React, { Component } from 'react';
 import firebase from '../../apis/firebase';
 import { connect } from 'react-redux'
 import { user } from '../../actions';
+import history from "../../history";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'
 const cx = classNames.bind(styles)
 class smsVer extends Component {
   constructor(props) {
     super(props);
+    this.recaptcha = React.createRef()
     this.state = {
       message: '',
-      random: '',
-      verifying: false,
-      error: false,
-      ver_num: '',
+      verifying: false
     };
   }
+
   async onSubmit () {
-    console.log('smsVer this.state.message', this.state.message)
+    await this.setState({verifying: true})
     const number = '+82' + this.state.message.substr(1, 10);
-    console.log('before')
-    const recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha');
-    console.log('middle')
-    const res = await firebase.auth().signInWithPhoneNumber(number, recaptcha)
-    console.log('after')
-    const code = prompt('Enter the otp', '')
-    console.log('final')
+    const recaptcha = this.recaptcha.current
+    const isrecaptcha = new firebase.auth.RecaptchaVerifier(recaptcha);
+    const res = await firebase.auth().signInWithPhoneNumber(number, isrecaptcha)
+    const code = prompt('문자로 전달받은 코드를 입력해주세요', '')
     const final = res.confirm(code)
     if (final) {
       await this.props.updateUser(true)
@@ -34,22 +31,27 @@ class smsVer extends Component {
   }
 
   render() {
+    const phone = this.state.verifying === false ?
+      <img src={require('../../assets/phone.png')} alt='phone-img'/> : null
+
     return (
+
       <div className={cx('modal')}>
         <h3 className={cx('modal-header')}>번호 인증하기</h3>
         <div className={cx('h-spacer')}></div>
         <div className={cx('auth-body')}>
+          {phone}
           <input
               className={cx('input-box')}
               type="tel"
-              placeholder='번호만 입력해주세요'
+              placeholder='핸드폰 번호를 입력해주세요(- 제외)'
               value={this.state.message}
-              onChange={(e) => 
-                this.setState({message: e.target.value})}
+              onChange={(e) => this.setState({message: e.target.value})}
             />
-          <div id="recaptcha"></div>
+          <div ref={this.recaptcha}></div>
           <div className={cx('h-spacer')}></div>
           <div className={cx('border-button')} onClick={() => this.onSubmit()}> 인증번호 전송 </div>
+          <div className={cx('explain')}><p>핸드폰 번호 확인은 불필요한 리뷰 중복을 방지하기 위한 목적으로 본 목적 이외에는 핸드폰 번호를 사용하지 않습니다.</p></div>
         </div>
       </div>
 
@@ -72,7 +74,6 @@ const mapDispatchToProps = (dispatch) => {
     reviewIng : (now, code) => dispatch(user.reviewIng(now, code))
   }
 }
-
 
 
 export default connect(

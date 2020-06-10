@@ -11,7 +11,10 @@ import {
 
 const initializer = {
     user: JSON.parse(sessionStorage.getItem('user')) || {},
-    myPage: JSON.parse(sessionStorage.getItem('myPage')) || null,
+    myPage: JSON.parse(sessionStorage.getItem('myPage')) ||
+    {
+        usms:null
+    },
     myPets: [],
     myPetDetails: [],
     likedHos: [],
