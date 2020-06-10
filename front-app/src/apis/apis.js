@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const apis = axios.create({
-    baseURL: 'https://www.balbadack.com/'
+    baseURL: 'http://www.balbadack.com/'
     // baseURL:'http://192.168.1.242:7888/'
 });
 
