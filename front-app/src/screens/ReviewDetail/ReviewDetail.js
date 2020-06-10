@@ -9,18 +9,12 @@ import history from '../../history';
 const cx = classNames.bind(styles)
 
 class ReviewDetail extends React.Component {
-  componentDidMount() {
-    // review.getHosReview(10)
-  }
+
 
   constructor(props) {
     super(props);
-    console.log('ReviewDetail state', this.props.location.state)
-    console.log('ReviewDetail reviewData', this.props.location.state.reviewData)
-    console.log('ReviewDetail careinfoData', this.props.location.state.careinfoData)
-    const reviewData = this.props.location.state.reviewData
+    const reviewData = this.props.location.state.review
     const scorelist = [reviewData.rclean, reviewData.rkindness, reviewData.rresult, reviewData.rprofessionality, reviewData.rovertreatment]
-    // const scorelist =  [3, 4, 5 ,3,1]
     const scorelabel = ['청결', '친절함', '치료결과', '전문성', '적정한 치료']
     const grade = scorelist.map((g, i) => ({ name: scorelabel[i], score: g }))
     const totalgrade = this.calcTotalScore(scorelist)
@@ -38,23 +32,22 @@ class ReviewDetail extends React.Component {
     return totalgrade
   }
   gotoHosDetail() {
-    let localhos = this.props.location.state.reviewData.hospital
+    let localhos = this.props.location.state.review.hospital
     history.push(`/hosDetail`, {localhos})
   }
   render() {
-    console.log('ReviewDetail state', this.props.location.state)
-    console.log('ReviewDetail reviewData', this.props.location.state.reviewData)
-    console.log('ReviewDetail careinfoData', this.props.location.state.careinfoData)
-    const photo1 = this.props.location.state.reviewData.rphoto1
-    const photo2 = this.props.location.state.reviewData.rphoto2
-    const photo3 = this.props.location.state.reviewData.rphoto3
-    // const photos = photolist.map(
-    //   p => (
-    //     <img className={cx('photo')} src={p} key={p} alt={p}/>
-    //   )
-    // )
+    const photolist = [
+      'https://lh3.googleusercontent.com/proxy/YW1gMOzSmQrKI2EiqMom2331SuMdj5Ygup6k61knR1JjzZm7_jW3XNH2qvRnx5sA289cZlALQegqeIEP85TRyooZaFoDqY4XPzELpH1dIdKDS0HnXV0TcJp6-1S8mTVsC392ahWDiVUyo__R-w'
+      , 'https://image-notepet.akamaized.net/resize/620x-/seimage/20190423%2F6c5334917de8a264671df20a96ed4a17.jpg'
+      , 'https://t1.daumcdn.net/liveboard/holapet/12aa7548ebbb46329878bae893899f50.jpg'
+    ]
+    const photos = photolist.map(
+      p => (
+        <img className={cx('photo')} src={p} key={p} alt={p}/>
+      )
+    )
 
-    const totallike = this.props.location.state.reviewData.rtotalgood
+    const totallike = this.props.location.state.review.rtotalgood
     // const tags = []
 
     // for (const [index, value] of this.props.location.state.reviewData.tags.entries()) {
@@ -66,15 +59,15 @@ class ReviewDetail extends React.Component {
       <div className={cx('container')}>
         <div className={cx('tag-box')}>
           <div onClick = {() => this.gotoHosDetail()} >
-            #{this.props.location.state.reviewData.hospital.hname}
+            #{this.props.location.state.review.hospital.hname}
           </div>
 
           {/* {tags} */}
         </div>
         <div className={cx('meta-box')}>
-          {/* <p>{this.props.location.state.reviewData.rtreatmentdata} 진료</p> */}
-          <p>{this.props.location.state.reviewData.rdate.substr(0, 10)} 작성</p>
-          방문 목적 : {this.props.location.state.reviewData.rpurpose}
+          {/* <p>{this.props.location.state.review.rtreatmentdata} 진료</p> */}
+          <p>{this.props.location.state.review.rdate.substr(0, 7)} 작성</p>
+          방문 목적 : {this.props.location.state.review.rpurpose}
         </div>
         <div className={cx('number')}>
           <div className={cx('icon-box')}>
@@ -86,31 +79,38 @@ class ReviewDetail extends React.Component {
             <p>좋다옹 {totallike}</p>
           </div>
         </div>
+        <div className={cx('h-spacer')}></div>
         <div className={cx('category')}><p>병원상세평가</p></div>
         <GradeBox
           grade={this.state.grade}
-          dojang={this.props.location.state.reviewData.rrevisit}
+          dojang={this.props.location.state.review.rrevisit}
           totalgrade={this.state.totalgrade}
           editable={this.state.editablegrade}
         />
+        <div className={cx('h-spacer')}></div>
         <div className={cx('category')}><p>진료 후기 상세</p></div>
         <div className={cx('basic-box')}>
           * 이 리뷰는 예시입니다.
           <p>
-            {this.props.location.state.reviewData.rcontent}
+            {this.props.location.state.review.rcontent}
           </p>
         </div>
-        {/* <div className={cx('category')}><p>사진후기</p></div> */}
-        {/* <div className={cx('photo-box')}> */}
-        {/* {photos} */}
-        {/* <img className={cx('photo')} src={photo1} key={photo1} alt="사진1"/>
-          <img className={cx('photo')} src={photo2} key={photo2} alt="사진2"/>
-          <img className={cx('photo')} src={photo3} key={photo3} alt="사진3"/>
-        </div> */}
+        <div className={cx('h-spacer')}></div>
+        <div className={cx('category')}><p>사진후기</p></div>
+        <div className={cx('photo-box')}>
+          {photos}
+        </div>
         {/* <div className={cx('category')}><p>비용표</p></div>
         <div className={cx('price-box')}>
           <ReviewPrice careinfo={this.props.location.state.careinfoData}/>
         </div> */}
+        <div className={cx('h-spacer')}></div>
+        <div
+          className={ cx('border-button')}
+          onClick = {()=> this.gotoHosDetail()}
+        >
+          <p>{this.props.location.state.review.hospital.hname} 상세 보기</p>
+        </div>
       </div>
     )
   }

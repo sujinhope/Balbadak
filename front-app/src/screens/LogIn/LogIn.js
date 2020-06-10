@@ -17,7 +17,6 @@ class LogIn extends Component {
     }
 
     render() {
-        console.log("======SignIn======")
         return (
             <div className={cx('container')}>
                 <div className={cx('category')}><p>Sign In</p></div>

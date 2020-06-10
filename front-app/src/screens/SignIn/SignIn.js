@@ -1,4 +1,3 @@
-/*global kakao*/
 import React, { Component } from "react";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'

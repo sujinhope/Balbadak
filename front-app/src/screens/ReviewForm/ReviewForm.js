@@ -1,5 +1,5 @@
 import React from "react";
-import DatePicker from '../../components/DatePicker/DatePicker'
+// import DatePicker from '../../components/DatePicker/DatePicker'
 import GradeBox from '../../components/HosGrades/GradeBox'
 import Pets from '@material-ui/icons/Pets'
 import Add from '@material-ui/icons/Add'
@@ -79,7 +79,6 @@ class ReviewForm extends React.Component {
       secretAccessKey: process.env.AWS_SECRET
     });
 
-    console.log('beforeSubmit')
 
     for await (const photo of this.state.photos) {
       const timeStamp = Math.floor(new Date().now / 1000)
@@ -90,7 +89,6 @@ class ReviewForm extends React.Component {
         ACL: "private",
       };
       await this.setState({ photoURL: this.state.photoURL.concat('sim_' + timeStamp + '.jpg') })
-      console.log('submitting')
       await s3.upload(params)
     }
 
@@ -103,7 +101,6 @@ class ReviewForm extends React.Component {
 
     // await s3.upload(params).catch(err => console.log('영수증 업로드 중 에러가 발생했다냥', err))
 
-    console.log('compoleteSubmit')
   }
 
   async submitForm() {
@@ -136,7 +133,6 @@ class ReviewForm extends React.Component {
       ciName: '혈액검사'
     }]
     const body = new reviewFormer(10, data, carelist, 'sim').getBody()
-    console.log('body', body)
     await review.postReview(body)
     window.alert('후기 작성이 완료되었다냥')
     history.push('/')

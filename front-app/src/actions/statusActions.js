@@ -4,7 +4,6 @@ import {
 
 
   export const setPathName = (pathname) => {
-      console.log(pathname)
     return {
       type: SELECT_HOS,
       pathname

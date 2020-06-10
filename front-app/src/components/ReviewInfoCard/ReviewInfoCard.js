@@ -1,89 +1,57 @@
 import React from 'react';
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind';
-import SportsIcon from '@material-ui/icons/Sports';
 import history from '../../history';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import StarIcon from '@material-ui/icons/Star';
-import { review } from '../../actions'
-import { connect } from "react-redux";
+
+const cx = classNames.bind(styles)
 
 const ReviewInfoCard = props => {
-  
-  const reviewData = props.hospitalData.review
-  const careinfoData = props.hospitalData.careinfo
-  console.log('ReviewInfoCard reviewData', reviewData)
-  console.log('ReviewInfoCard careinfoData', careinfoData)
-  
-  const cx = classNames.bind(styles)
-  var pet_data = [];
-  console.log('ReviewInfoCard careinfoData.length', careinfoData.length)
-  for (var i = 0; i < careinfoData.length; i++) {
+  const { review, careinfo } = props.hospitalData
+  let pet_data = [];
+  for (let i = 0; i < careinfo.length; i++) {
     pet_data.push({
-      pet: careinfoData[i].animal.aspecies,
-      c_name: careinfoData[i].ciName
+      pet: careinfo[i].animal.aspecies,
+      c_name: careinfo[i].ciName
     })
   }
 
-  const scorelist =  [reviewData.rclean, reviewData.rkindness, reviewData.rresult, reviewData.rprofessionality, reviewData.rovertreatment]
+  const scorelist =  [review.rclean, review.rkindness, review.rresult, review.rprofessionality, review.rovertreatment]
   const totalgrade = calcTotalScore(scorelist)
+  
   function calcTotalScore(scorelist) {
     const totalscore = Math.round(((scorelist.reduce((a, b) => a + b, 0) / scorelist.length) + Number.EPSILON) * 100)/100
     return totalscore
   }
-  // const tags = []
-  // for (const [index, value] of reviewData.tags.entries()) {
-  //   tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
-  // }
-  var cont = []
 
-  cont = reviewData.rcontent.substr(0, 120)
+  const cont = review.rcontent.substr(0, 70)
 
   async function handleClick() {
-    await review.recieveHosReview(reviewData)
-    history.push("/ReviewDetail", {reviewData, careinfoData})
+    history.push("/ReviewDetail", {review, careinfo})
   }
+
 
   return (
     <>
-      <div className={cx('rev-box')}>
-        <div classname={cx('rev-header')}>
-          <h3>{reviewData.hospital.hname}</h3>
-          {/* <div className={cx('divider')}></div> */}
-          <p>방문 날짜 : {reviewData.rdate.substr(0, 7)}</p>
-          <p>방문 목적 : {reviewData.rpurpose}</p>
+      <div className={cx('rev-box')} onClick={handleClick.bind(this)}>
+        <div className={cx('rev-header')}>
+          <h4>#{review.rpurpose} #{review.hospital.hname}</h4>
         </div>
-        <div className={cx('divider')}></div>
-        <div className={cx('rev-meta-box')}>
-        
-          <FavoriteIcon sytle={{fontSize: 8}}/>
-          <p>{reviewData.rtotalgood}명 </p>
-          <StarIcon sytle={{fontSize: 8}}/>
+        <div className={cx('meta-box')}>
+          <img className={cx('hos-icon')} src={require('../../assets/star.png')}/>
           <p>{totalgrade} 점</p>
+          <img className={cx('hos-icon')} src={require('../../assets/like.png')}/>
+          <p>{review.rtotalgood}명 </p>
         </div>
-        <div className={cx('divider')}></div>
-        {/* <div className={cx('tag-box')}> */}
-          {/* #{reviewData.hospital.hname} <br/> */}
-          {/* #{reviewData.rdate.substr(0, 10)}  */}
-          {/* #도움이 됐어요! {reviewData.rtotalgood}명 #★{totalgrade} */}
-        {/* </div> */}
         <div className={cx('rev-content')}>
-        <p>* 이 리뷰는 예시입니다. <br/>
-        {cont} ...</p>
+          <p>* 이 리뷰는 예시 리뷰입니다 :)</p>
+          <p>{cont} ...</p>
         </div>
-        <div className={cx('div-center')}>
-        <span onClick= {() => handleClick()}>더보기</span> 
+        <div>
+          <p>방문 날짜 : {review.rdate.substr(0, 7)}</p>
+          
         </div>
-        <br />
       </div>
     </>    
   );
 }
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    // recieveHosReview : (reviewData) => dispatch(review.recieveHosReview(reviewData))
-  }
-}
-
-export default connect(mapDispatchToProps)(ReviewInfoCard);
+export default ReviewInfoCard;

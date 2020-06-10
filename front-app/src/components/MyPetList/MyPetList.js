@@ -14,7 +14,6 @@ class MyPetList extends Component {
     }
 
     setList() {
-        console.log('setlist')
         var a = this.props.pet_info
         var dis = [];
         if (a) {

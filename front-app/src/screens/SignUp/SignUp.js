@@ -1,4 +1,3 @@
-/*global kakao*/
 import React, { Component } from "react";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'
@@ -58,7 +57,6 @@ class SignUp extends Component {
             const validEmail = this.ValidateEmail()
             const validPwd = this.validatePwd()
             if ( ( validEmail === true ) & ( validPwd === true ) ) {
-                console.log(this.state.username, this.state.password)
                 await this.props.register(this.state.username, this.state.password)
                 window.alert('회원가입이 완료되었다냥')
                 history.push('/')

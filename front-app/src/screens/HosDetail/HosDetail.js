@@ -141,7 +141,6 @@ class HosDetail extends Component {
         
     }
     setImage() {
-        console.log(this.props.location.state.localhos)
         var hosPic = this.props.location.state.localhos.hospitalPicture;
         if (!hosPic) {
             this.state.image.push({

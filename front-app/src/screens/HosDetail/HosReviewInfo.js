@@ -9,8 +9,6 @@ import { connect } from "react-redux";
 const HosReviewInfo = props => {
   
   const reviewData = props.hospitalData
-    console.log("====here===")
-    console.log(reviewData.careinfo)
   const cx = classNames.bind(styles)
   var pet_data = [];
   for (var i = 0; i < reviewData.careinfo.length; i++) {
@@ -25,7 +23,6 @@ const HosReviewInfo = props => {
   // }
   var cont = []
 
-  console.log(reviewData.review)
   cont = reviewData.review.rcontent.substr(0, 120)
 
   async function handleClick() {

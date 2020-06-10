@@ -23,12 +23,17 @@ class smsVer extends Component {
     const isrecaptcha = new firebase.auth.RecaptchaVerifier(recaptcha);
     const res = await firebase.auth().signInWithPhoneNumber(number, isrecaptcha)
     const code = prompt('문자로 전달받은 코드를 입력해주세요', '')
-    const final = res.confirm(code)
-    if (final) {
-      await this.props.updateUser(true)
-      await this.props.reviewIng('isSms', false)
+    if (code) {
+      const final = res.confirm(code)
+      if (final) {
+        await this.props.updateUser(true)
+        await this.props.reviewIng('isSms', false)
+      }
+    } else {
+      await window.alert('입력 과정에서 문제가 발생했습니다. 다시 시도해주세요.')
+      history.push('/selectOption')
     }
-  }
+  } 
 
   render() {
     const phone = this.state.verifying === false ?

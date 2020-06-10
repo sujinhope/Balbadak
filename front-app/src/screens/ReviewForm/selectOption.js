@@ -3,6 +3,7 @@ import history from "../../history";
 
 import Modal from '@material-ui/core/Modal';
 
+
 import recieptHelper from '@ming822/ocr-reciept-helper'
 import vision from 'react-cloud-vision-api'
 import SmsVer from './smsVer.js'
@@ -26,14 +27,15 @@ class selectOption extends React.Component {
     if (props.myPage.usms === null) { stage = -1 }
     else if (props.myPage.usms === false) { stage = 0 }
     else if (props.hosInfo === null) { stage = 1 }
-    else if (props.review.reciept === null) { stage = 2 }
-    else { stage = 3 }
-
+    else { stage = 2 }
     super(props);
     this.state = {
       reciept: null,
       searchWord: '',
       currStage: stage,
+      loaded: false,
+      isDate: null,
+      defaultCareList: null
     }
   }
 
@@ -62,6 +64,7 @@ class selectOption extends React.Component {
 
   async handleReciept(e) {
     const files = [...e.target.files]
+    await this.setState({loaded:false})
     await this.setState({ reciept: files[0] })
     await this.processFile(files[0])
   }
@@ -88,25 +91,38 @@ class selectOption extends React.Component {
       ]
     })
     const res = await vision.annotate(req)
-    const resJson = res.responses[0]
-    const reciept = new recieptHelper(resJson, '스토리동물병원')
-
-    const isDate = reciept.dateInfo.length > 0
-    const hasPlace = reciept.isPlaceName
-    if (isDate & hasPlace) {
-      await this.props.uploadReciept(file, isDate, hasPlace, reciept.priceTable)
-      await this.props.reviewIng('isReciepting', true)
+    const resJson = res.responses
+    if (JSON.stringify(resJson)==='{}') {
+      alert('영수증에 글자가 보이지 않다냥 8-8 영수증이 아닌 것 같다냥 8-8')
+      this.setState({reciept:null})
     } else {
-      alert('영수증에 날짜 정보나 병원 이름이 보이지 않다냥 8-8')
+      const hosName = this.props.hosInfo.name.replace(/\s/g, '+')
+      const reciept = new recieptHelper(resJson[0], hosName)
+      const isDate = reciept.dateInfo.length > 0
+      const hasPlace = reciept.isPlaceName
+      if (isDate & hasPlace) {
+        await this.setState({isDate: reciept.isDate, defaultCareList: reciept.priceTable})
+        await this.props.reviewIng('isReciepting', true)
+        await this.setState({loaded: true})
+      } else {
+        alert('영수증에 날짜 정보나 병원 이름이 보이지 않다냥 8-8')
+        this.setState({reciept:null})
+      }
     }
+  }
+
+  async uploadR() {
+    const { reciept, isDate, defaultCareList } = this.state
+    await this.props.uploadReciept(reciept, isDate, true, defaultCareList)
+    await this.props.reviewIng('isReciepting', false)
   }
 
 
 
   render() {
-    const { myPage, email, myreciept, hosSearchList, search,
+    const { myPage, email, hosSearchList, search,
       hosInfo, isSearching, isSms, isReciepting } = this.props
-    const { currStage, reciept, searchWord } = this.state
+    const { currStage, reciept, searchWord, loaded, defaultCareList } = this.state
 
 
     const stageDojang = []
@@ -134,33 +150,36 @@ class selectOption extends React.Component {
         }
       }
     }
-    // if ((hosSearchList !== null) && (hosSearchList !== undefined)) {
-    //   const mySearch = hosSearchList.find(h => h.searchWord === searchWord)
-    //   if (search === true) {
-    //     if ((mySearch !== null) && (mySearch !== undefined)) {
-    //       searchResult = mySearch.list.map(l =>
-    //         <div
-    //           className={cx('search-list-box')}
-    //           onClick={() => this.handleHos(l)}
-    //           key={l.hcode}
-    //         >
-    //           <p>{l.hname}</p>
-    //           <p className={cx('small-text')}>{l.haddress}</p>
-    //         </div>
-    //       )
-    //     } else { searchResult = null }
-    //   }
-    //   else {
-    //     searchResult = null
-    //   }
-    // } else {
-    //   searchResult = null
-    // }
-
 
     let carebody = null
-    if (myreciept) {
-      const carelist = myreciept.items.map((r, i) => <div key={`ci-${i}`}>{r.join(' | ')}</div>)
+    if (defaultCareList !== null) {
+      const carelist = defaultCareList.map((r, i) => 
+        <div key={`ci-${i}`}>
+          <input
+            type='text'
+            defaultValue={r[0]}
+            onChange={(e) => 
+              this.setState({defaultCareList: this.state.defaultCareList.map((l,ii) => {
+                if (ii === i) { return [e.target.value, l[ii][1], l[ii][2]] }
+                else { return l}})})}/>
+          <span> : </span>
+          <input
+            type='number'
+            defaultValue={r[1].replace(/[^0-9]+/g, "")}
+            onChange={(e) =>
+              this.setState({defaultCareList: this.state.defaultCareList.map((l,ii) => {
+                if (ii === i) { return [l[ii][0], e.target.value, l[ii][2]] }
+                else { return l}})})}/>
+          <span>개</span>
+          <input
+            type='number'
+            defaultValue={r[2]}
+            onChange={(e) =>
+              this.setState({defaultCareList: this.state.defaultCareList.map((l,ii) => {
+                if (ii === i) { return[l[ii][0], l[ii][1], e.target.value] }
+                else { return l}})})}/>
+          <span>원</span>
+        </div>)
       carebody = (
         <Modal
           open={isReciepting}
@@ -173,12 +192,11 @@ class selectOption extends React.Component {
             <div className={cx('h-spacer')}></div>
             <div
               className={cx('border-button', 'xsmall-btn')}
-              onClick={() => this.props.reviewIng('isReciepting', false)}>확인</div>
+              onClick={this.uploadR.bind(this)}>확인</div>
           </div>
         </Modal>
       )
     }
-
 
     const hosbody = (
       <div className={cx('modal')}>
@@ -364,7 +382,7 @@ class selectOption extends React.Component {
             />
           </div>
           <div
-            className={reciept !== null ? cx('border-button', 'xsmall-btn') : cx('hide')}
+            className={(reciept !== null) && (loaded === true) ? cx('border-button', 'xsmall-btn') : cx('hide')} 
             onClick={() => this.setState({ currStage: currStage + 1 })}>
             다음
           </div>

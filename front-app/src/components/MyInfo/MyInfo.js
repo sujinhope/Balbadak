@@ -1,16 +1,11 @@
 import React, { Component } from "react";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'
-import history from "../../history";
 import { connect } from "react-redux";
 import { user } from '../../actions';
 const cx = classNames.bind(styles)
 
 class MyInfo extends Component {
-    componentDidMount() {
-        // this.state.user = user.getMyPage()
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -45,12 +40,9 @@ class MyInfo extends Component {
         // history.push('/')
     }
     render() {
-        console.log(this.props)
         if(!this.props.mypage) {
             user.getMyPage();
         }
-        console.log('PROPS: ', this.state)
-        console.log('props: ', this.state.user)
         return (
             <div className={cx('container')}>
                 <div className={cx('basic-box')}>

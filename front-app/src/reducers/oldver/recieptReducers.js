@@ -12,7 +12,6 @@ const initializer = {
 const reciept = (state = initializer, action) => {
     switch (action.type) {
         case UPLOAD_RECIEPT_INFO:
-            console.log('upload reciept')
             return {
                 ...state,
                 bufferData: action.bff,

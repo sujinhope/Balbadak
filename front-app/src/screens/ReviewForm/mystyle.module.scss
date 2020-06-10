@@ -36,31 +36,7 @@
   margin: 1px;
 }
 
-.border-button {
-	background-color:$beige;
-	cursor:pointer;
-	color:$darkgreen;
-	font-weight:bold;
-  text-shadow:0px 1px 0px #ffffff;
-  @include width-size(0px);
-  @include flex-center();
-  @include round-border();
-  border-bottom: 3px double $darkgreen;
-  border-right: 3px double $darkgreen;
-  position:relative;
-  p {
-    margin:2px;
-  }
-  span {
-    font-weight: lighter;
-    text-shadow: none;
-    color: $red;
-    font-size: x-small;
-    position:absolute;
-    left:calc(50% + 45px);
-    bottom: 0;
-  }
-}
+
 
 .smaller-btn {
   width: 50%;
@@ -386,12 +362,7 @@ p {
 }
 
 
-.reciept-body {
-  @include flex-center();
-  @include flex-vertical();
-  align-items: center;
-  width: 100%;
-}
+
 
 .auth-body {
   height: 100%;
@@ -407,6 +378,29 @@ p {
     margin: 50px auto 20px;
   }
 }
+
+.reciept-body {
+  height: 75%;
+  align-items: center;
+  @include flex-vertical();
+  @include flex-nowrap();
+  @include scroll();
+  div {
+    @include flex-center()
+  }
+  div>input {
+    width: 40%;
+    margin: 5px 1px;
+    &:nth-child(3) {
+      width: 5%;
+    }
+    &:nth-child(5) {
+      width: 15%;
+      margin-left: 5px;
+    }
+  }
+}
+
 
 .explain {
   width: 90%;

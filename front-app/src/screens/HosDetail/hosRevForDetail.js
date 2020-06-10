@@ -148,7 +148,6 @@ class hosRevForDetail extends Component {
         let list, reviewCards;
         if (true) {
             list = this.props.location.state.localRev;
-            console.log(list)
             reviewCards = list.map(r => <HosReviewInfo hospitalData={r} key={`newCard${r.hcode}`}/>)
           } else {
             return (
