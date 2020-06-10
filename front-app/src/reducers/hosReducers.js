@@ -2,8 +2,11 @@ import {
   MAIN_SEARCH,
   GET_HOS_BY_LOC,
   GET_HOS_BY_WORD,
+  GET_HOS_PHOTO,
   NAME_LIST
 } from '../actions/types'
+
+import apis from '../apis/apis'
 
 const initializer = {
   mainSearch: JSON.parse(window.localStorage.getItem('mainSearch')) || {
@@ -97,6 +100,8 @@ export default (state = initializer, action) => {
           })
         }
       }
+      case GET_HOS_PHOTO:
+        return { ...state, hosPhoto: [...action.photocode] }
     default:
       return state;
   }

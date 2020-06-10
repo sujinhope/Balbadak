@@ -52,6 +52,7 @@ export const signIn = (user_id, user_pw) => {
 // 1.1. 유저 정보를 user 에 저장하기
 export const signedIn = (userInfo) => {
   console.log('signedIn')
+  console.log('userInfo: ', userInfo)
   window.sessionStorage.setItem('user', JSON.stringify(userInfo))
   return {
     type: SIGNIN,

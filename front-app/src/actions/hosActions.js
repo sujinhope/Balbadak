@@ -231,3 +231,20 @@ export const recievePhoto = (photocode) => {
     photocode
   }
 }
+
+
+export const getHosPhoto = (photocode) => {
+  console.log('photocode', photocode)
+  return dispatch => {
+    return apis.post('hospitalpicture/findByhospital', photocode)
+      .then((res) => dispatch(recievePhoto(res.data)))
+  }
+}
+
+// export const recievePhoto = (photocode) => {
+//   console.log('recievePhoto :  ',photocode)
+//   return {
+//     type: GET_HOS_PHOTO,
+//     photocode
+//   }
+// }

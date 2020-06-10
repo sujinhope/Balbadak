@@ -41,6 +41,7 @@ class SignInPage extends Component {
         }
     }
     render() {
+        // console.log("로그인 정보: ", this.props.user)
         return (
             <div className={cx('container')}>
                 <div className={cx('category')}><p>Sign In</p></div>

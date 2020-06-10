@@ -6,7 +6,10 @@ import FilledInput from '@material-ui/core/FilledInput';
 import imgA from "../../assets/imgA.png";
 import plus_b from "../../assets/plus_b.png";
 import MyPetList from "../../components/MyPetList/MyPetList";
+import MyInfo from "../../components/MyInfo/MyInfo";
 import Modal from '@material-ui/core/Modal';
+import { user } from "../../actions"
+import { CssBaseline } from "@material-ui/core";
 const cx = classNames.bind(styles)
 
 class MyPage extends React.Component {
@@ -19,6 +22,7 @@ class MyPage extends React.Component {
             a_species: '',
             a_kig: 0,
             a_year: 0,
+            user: this.props.user
         }
         this.toggleAdd = this.toggleAdd.bind(this);
         this.addPetName = this.addPetName.bind(this);
@@ -44,6 +48,7 @@ class MyPage extends React.Component {
 
     }
     render() {
+
         const body = (
             <div className={cx('modal')}>
                 <p>반려동물 이름 </p>
@@ -72,23 +77,34 @@ class MyPage extends React.Component {
                     <div className={cx('small-col')}>
                     </div>
                     <div className={cx('spacer')}></div>
-
                 </div>
                 <div className={cx('category')}>
-                    <p>나의 팻 </p>
+                    <p>내 정보 </p>
+                </div>
+                <div>
+                    <MyInfo user = {this.state.user}/>
+                    {/* <MyInfo user = {this.state.user}/> */}
+                </div>
+                <div className={cx('category')}>
+                    <p>나의 펫 </p>
                 </div>
                 <div>
                     <MyPetList />
                 </div>
                 <div align="center" onClick={() => this.toggleAdd(true)}>
-                    <img src={plus_b} width="50" height="50" ></img>
+                    <img src={plus_b} width="20" height="20" ></img>
                 </div>
                 <div className={cx('category')}>
                     <p>내가 작성한 리뷰</p>
                 </div>
-
+                <div>
+                    {/* <MyInfo /> */}
+                </div>
                 <div className={cx('category')}>
                     <p>내가 찜한 병원</p>
+                </div>
+                <div>
+                    {/* <MyInfo /> */}
                 </div>
                 <Modal
                     open={this.state.isSearching}

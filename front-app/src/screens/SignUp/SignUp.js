@@ -94,7 +94,9 @@ class SignUp extends Component {
                     <div className={cx('border-button')} onClick={() => this.handleSummit()}>
                         <p>가입</p>
                     </div>
-                    <p>이미 회원이라면 <a onClick={() => history.push('/SignUp')}>로그인</a>하러가기</p>
+                    <p>이미 회원이라면 <a onClick={() => //history.replace(history.length - 1, '/SignIn')
+                                         history.push('/SignIn')
+                    }>로그인</a>하러가기</p>
                 </div>
             </div>
         );
