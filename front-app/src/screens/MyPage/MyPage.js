@@ -2,14 +2,12 @@ import React from "react";
 
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'
-import FilledInput from '@material-ui/core/FilledInput';
-import imgA from "../../assets/imgA.png";
+// import imgA from "../../assets/imgA.png";
 import plus_b from "../../assets/plus_b.png";
 import MyPetList from "../../components/MyPetList/MyPetList";
 import MyInfo from "../../components/MyInfo/MyInfo";
 import Modal from '@material-ui/core/Modal';
-import { user } from "../../actions"
-import { CssBaseline } from "@material-ui/core";
+// import { user } from "../../actions"
 const cx = classNames.bind(styles)
 
 class MyPage extends React.Component {
@@ -92,7 +90,7 @@ class MyPage extends React.Component {
                     <MyPetList />
                 </div>
                 <div align="center" onClick={() => this.toggleAdd(true)}>
-                    <img src={plus_b} width="20" height="20" ></img>
+                    <img src={plus_b} width="20" height="20" alt=""></img>
                 </div>
                 <div className={cx('category')}>
                     <p>내가 작성한 리뷰</p>

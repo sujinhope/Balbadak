@@ -79,13 +79,13 @@ class SignUp extends Component {
                         onChange={(e) => this.setState({username: e.target.value})}></input>
                     <p>비밀번호</p>
                     <input 
-                        type="text" 
+                        type="password" 
                         className={cx('input-box')} 
                         placeholder="8자 이상의 비밀번호를 입력해주세요" 
                         onChange={(e) => this.setState({password: e.target.value})}></input>
                     <p>비밀번호 확인</p>
                     <input 
-                        type="text" 
+                        type="password" 
                         className={cx('input-box')} 
                         placeholder="비밀번호를 다시 입력해주세요" 
                         onChange={(e) => this.setState({password2: e.target.value})}></input>

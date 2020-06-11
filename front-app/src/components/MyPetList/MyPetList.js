@@ -8,10 +8,6 @@ class MyPetList extends Component {
     componentDidMount() {
         user.getPetDetail('psj');
     }
-    constructor(props) {
-        super(props);
-
-    }
 
     setList() {
         var a = this.props.pet_info

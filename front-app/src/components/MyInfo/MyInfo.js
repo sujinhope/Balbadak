@@ -49,9 +49,9 @@ class MyInfo extends Component {
                     <p>아이디</p>
                     <input type="text" className={cx('input-box')} placeholder={this.state.username} onChange={this.updateId}></input>
                     <p>비밀번호</p>
-                    <input type="text" className={cx('input-box')} placeholder={this.state.password} onChange={this.updatePw}></input>
+                    <input type="password" className={cx('input-box')} placeholder={this.state.password} onChange={this.updatePw}></input>
                     <p>비밀번호 확인</p>
-                    <input type="text" className={cx('input-box')} placeholder={this.state.passwordC} onChange={this.updatePwc}></input>
+                    <input type="password" className={cx('input-box')} placeholder={this.state.passwordC} onChange={this.updatePwc}></input>
                     <div className={cx('border-button')} onClick={() => this.handleSummit()}>
                         <p>수정했다냥</p>
                     </div>

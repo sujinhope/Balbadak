@@ -67,6 +67,13 @@ export const SearchFlag = (flag) => {
 // ------------- review 관련 action --------
 // 1. 현재 내 위치에서 3km 이내의 리뷰 조회 with 필터
 export const getReview = (searchWord, lat, long, distance, filter) => {
+  config = sessionStorage.getItem('user') ? {
+    headers: {
+      Authorization: JSON.parse(sessionStorage.getItem('user')).accessToken,
+      'Content-Type':'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  } : null
   return dispatch => {
     return apis.post(`/review/findByKeyword/${distance}/${filter}/${searchWord}?latitude=${lat}&longtitude=${long}`, null, config)
       .then(res => {
