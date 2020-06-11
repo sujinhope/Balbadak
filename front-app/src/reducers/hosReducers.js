@@ -6,8 +6,6 @@ import {
   NAME_LIST
 } from '../actions/types'
 
-import apis from '../apis/apis'
-
 const initializer = {
   mainSearch: JSON.parse(window.localStorage.getItem('mainSearch')) || {
     searchWord: '',

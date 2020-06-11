@@ -10,7 +10,7 @@ class EmptyList extends Component {
     super(props)
     let mess
     if (props.mess === 'empty') {
-      mess = <p className={cx('message')}>'찾으시는 검색결과가 없대오ㅠㅠ'</p>
+      mess = <p className={cx('message')}>찾으시는 검색결과가 없대오ㅠㅠ</p>
     } else {
       mess = 
       <>

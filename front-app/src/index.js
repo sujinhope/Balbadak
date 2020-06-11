@@ -6,7 +6,6 @@ import reduxThunk from "redux-thunk";
 import App from './App';
 import './index.css';
 import reducers from './reducers';
-import { hos } from './actions'
 // import {getNearHospitals, getNearHosByStar, getHosSearchList} from './actions'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

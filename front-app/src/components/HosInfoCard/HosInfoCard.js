@@ -40,9 +40,9 @@ const HosInfoCard = props => {
           </div>
           <div className={cx('box-body')}>
             <div className={cx('meta-box')}>
-              <img className={cx('hos-icon')} src={require('../../assets/star.png')}/>
+              <img className={cx('hos-icon')} src={require('../../assets/star.png')} alt=""/>
               <p>평점 : {hstarrating}점</p>
-              <img className={cx('hos-icon')} src={require('../../assets/review4.png')}/>
+              <img className={cx('hos-icon')} src={require('../../assets/review4.png')} alt=""/>
               <p>리뷰 : {hreviewCount === null ? 0 : hreviewCount}개</p>
             </div>
             <div className={cx('tag-box')}>

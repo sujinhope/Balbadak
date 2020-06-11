@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind';
-import SportsIcon from '@material-ui/icons/Sports';
 import history from '../../history';
 import { review } from '../../actions'
 import { connect } from "react-redux";
