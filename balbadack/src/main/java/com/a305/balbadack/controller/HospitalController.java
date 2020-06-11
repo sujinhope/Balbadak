@@ -193,7 +193,7 @@ public class HospitalController {
   
   // HQL ordered by 두개하면 앞에꺼 부터 정렬됨.
   @ApiOperation("평점 높은 순서중 거리순 병원")
-  @PostMapping(value="/starrating/{page}")
+  @GetMapping(value="/starrating/{page}")
   public Map<String, Object> findHospitalByStar(@RequestParam final Double latitude, @RequestParam final Double longtitude,@PathVariable Integer page){  
     page = Integer.max(0, page*limit);
     Map<String, Object> resultmap = new HashMap<String, Object>();

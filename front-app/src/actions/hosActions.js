@@ -110,7 +110,7 @@ export const getHosByReview = (lat, long, page, category, filter) => {
 // 4. 전체 지역 병원 검색 별점순 요청하기
 export const getHosByStar = (lat, long, page, category, filter) => {
   return dispatch => {
-    return apis.post('hospital/starrating/'+page+ '?latitude=' + lat + '&longtitude=' + long, null, config)
+    return apis.get('hospital/starrating/'+page+ '?latitude=' + lat + '&longtitude=' + long, config)
       .then(res => {
         dispatch(recieveHosByLoc(lat, long, page, res.data.next, res.data.hospital, category, filter))
         dispatch(setSearchStatus(true))
