@@ -1,4 +1,3 @@
-/*global kakao*/
 import React, { Component } from "react";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'
@@ -54,7 +53,7 @@ class SignInPage extends Component {
                         onChange={(e) => this.setState({ username: e.target.value })}></input>
                     <p>비밀번호</p>
                     <input
-                        type="text"
+                        type="password"
                         className={cx('input-box')}
                         placeholder="비밀번호를 입력해주세요"
                         onChange={(e) => this.setState({ password: e.target.value })}></input>

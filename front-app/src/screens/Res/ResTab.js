@@ -9,7 +9,6 @@ import BigMap from './BigMap';
 
 import MapIcon from '@material-ui/icons/Map';
 import ListIcon from '@material-ui/icons/List';
-import history from "../../history";
 
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind';
@@ -75,7 +74,6 @@ class ResTab extends React.Component {
 
 	async goMap() {
 		await this.setState({map: !this.state.map})
-		console.log(this.state.map)
 	}
 
 	async setSearchFlag(flag) {
@@ -83,7 +81,6 @@ class ResTab extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.hos)
 		const { curr, near, map } = this.state
 		const { filter } = this.props.hos.mainSearch
 		const floating = (map === true) ? <ListIcon/> : <MapIcon/>

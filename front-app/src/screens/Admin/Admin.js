@@ -8,25 +8,14 @@ class Admin extends Component {
     componentDidMount() {
        this.props.recieveReviewReport();
     }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            
-        };
-    }
     HandleDelete(r_code) {
         this.props.deleteReview(r_code);
 
     }
     setListReported() {
-        console.log('---setlist---')
-
     }
     render() {
     //    this.props.recieveReviewReport();
-       console.log(this.state)
-       console.log(this.props.reportedReview)
        this.setListReported();
         return (
             <div>

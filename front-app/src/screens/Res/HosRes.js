@@ -20,7 +20,6 @@ class HosRes extends Component {
 	constructor(props) {
 		super(props);
 		const { searchWord, lat, long, category, filter } = props.hos.mainSearch
-		console.log(searchWord, lat, long, category, filter)
 		if (props.hos[filter].length !== 0) {
 			if (category === 'hosByLoc') {
 				if (!props.hos[filter].find(s => (s.lat === lat) & (s.long === long))) {

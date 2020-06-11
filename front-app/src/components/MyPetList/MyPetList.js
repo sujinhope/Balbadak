@@ -8,13 +8,8 @@ class MyPetList extends Component {
     componentDidMount() {
         user.getPetDetail('psj');
     }
-    constructor(props) {
-        super(props);
-
-    }
 
     setList() {
-        console.log('setlist')
         var a = this.props.pet_info
         var dis = [];
         if (a) {

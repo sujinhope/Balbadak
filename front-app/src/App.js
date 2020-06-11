@@ -21,12 +21,15 @@ import SelectOption from "./screens/ReviewForm/selectOption";
 import ReviewForm from "./screens/ReviewForm/ReviewForm";
 
 import hosRevForDetail from './screens/HosDetail/hosRevForDetail';
+
+import ErrorBoundary from './components/Error/ErrorBoundary'
 import Error from './components/Error/Error';
 import EmptyList from './components/Error/EmptyList';
+
 const App = () => {
   return (
 
-    <div>
+    <ErrorBoundary>
       <Router history={history}>
         <Navigation>
           <div>
@@ -50,7 +53,7 @@ const App = () => {
         </Navigation>
 
       </Router>
-    </div>
+    </ErrorBoundary>
   );
 };
 

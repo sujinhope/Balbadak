@@ -13,19 +13,16 @@ class GradeBox extends React.Component {
     var {grade, editable, totalgrade, dojang} = ''
     
     if(this.props.editable === undefined){
-      console.log('editable undefined')
       grade = this.props.review.grade
       editable = true
       totalgrade = this.props.review.totalgrade
       dojang = this.props.review.dojang
     }else if(!this.props.editable){
-      console.log('editable false')
       grade = this.props.grade
       editable = this.props.editable
       totalgrade = this.props.totalgrade
       dojang = this.props.dojang
     }else{
-      console.log('editable true')
       grade = this.props.review.grade
       editable = true
       totalgrade = this.props.review.totalgrade

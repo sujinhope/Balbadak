@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind';
-import SportsIcon from '@material-ui/icons/Sports';
 import history from '../../history';
 import { review } from '../../actions'
 import { connect } from "react-redux";
@@ -9,8 +8,6 @@ import { connect } from "react-redux";
 const HosReviewInfo = props => {
   
   const reviewData = props.hospitalData
-    console.log("====here===")
-    console.log(reviewData.careinfo)
   const cx = classNames.bind(styles)
   var pet_data = [];
   for (var i = 0; i < reviewData.careinfo.length; i++) {
@@ -25,7 +22,6 @@ const HosReviewInfo = props => {
   // }
   var cont = []
 
-  console.log(reviewData.review)
   cont = reviewData.review.rcontent.substr(0, 120)
 
   async function handleClick() {

@@ -17,7 +17,6 @@ class LogIn extends Component {
     }
 
     render() {
-        console.log("======SignIn======")
         return (
             <div className={cx('container')}>
                 <div className={cx('category')}><p>Sign In</p></div>
@@ -26,7 +25,7 @@ class LogIn extends Component {
                     <p>아이디</p>
                     <input type="text" className={cx('input-box')} placeholder="Your Id.."></input>
                     <p>비밀번호</p>
-                    <input type="text" className={cx('input-box')} placeholder="Your Password.."></input>
+                    <input type="password" className={cx('input-box')} placeholder="Your Password.."></input>
                     <div className={cx('border-button')}>
                         <p>로그인</p>
                     </div>

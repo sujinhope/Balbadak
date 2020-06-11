@@ -1,4 +1,3 @@
-/*global kakao*/
 import React, { Component } from "react";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind'
@@ -58,7 +57,6 @@ class SignUp extends Component {
             const validEmail = this.ValidateEmail()
             const validPwd = this.validatePwd()
             if ( ( validEmail === true ) & ( validPwd === true ) ) {
-                console.log(this.state.username, this.state.password)
                 await this.props.register(this.state.username, this.state.password)
                 window.alert('회원가입이 완료되었다냥')
                 history.push('/')
@@ -81,13 +79,13 @@ class SignUp extends Component {
                         onChange={(e) => this.setState({username: e.target.value})}></input>
                     <p>비밀번호</p>
                     <input 
-                        type="text" 
+                        type="password" 
                         className={cx('input-box')} 
                         placeholder="8자 이상의 비밀번호를 입력해주세요" 
                         onChange={(e) => this.setState({password: e.target.value})}></input>
                     <p>비밀번호 확인</p>
                     <input 
-                        type="text" 
+                        type="password" 
                         className={cx('input-box')} 
                         placeholder="비밀번호를 다시 입력해주세요" 
                         onChange={(e) => this.setState({password2: e.target.value})}></input>

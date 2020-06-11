@@ -10,10 +10,6 @@ class Error extends Component {
   componentDidMount() {
   
   }
-  constructor(props) {
-    super(props);
-    
-  }
  
   render() {
     return (
@@ -21,7 +17,7 @@ class Error extends Component {
         <div className = {cx('basic-box')}>
             <img
                 className = {cx('angry-cat')} 
-                src={require('../../assets/catimg.png')}/>      
+                src={require('../../assets/catimg.png')} alt=""/>      
             <p className = {cx('error-code')}>404</p>
             <p>에러 페이지다냥</p>
             <p

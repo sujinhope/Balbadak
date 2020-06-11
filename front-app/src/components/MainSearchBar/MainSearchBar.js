@@ -5,7 +5,6 @@ import classNames from 'classnames/bind'
 import SearchIcon from '@material-ui/icons/Search'
 import history from "../../history";
 import { hos } from '../../actions'
-import { useLocation } from 'react-router-dom'
 const cx = classNames.bind(styles)
 
 class MainSearchBar extends Component {

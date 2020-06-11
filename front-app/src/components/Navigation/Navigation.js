@@ -14,7 +14,7 @@ const cx = classNames.bind(styles)
 
 const checkCancel = () => {
   const r = window.confirm('작성하던 내용이 사라진다냥')
-  if (r == true) {
+  if (r === true) {
     return history.goBack()
   }
 }
@@ -26,9 +26,7 @@ const Navigation = (props) => {
   let rightBtn = JSON.stringify(props.user)  === '{}' ?
   <div className={cx('nav-icon-box')}><PersonIcon onClick={()=> history.push('/SignIn')}/></div> :
   <div className={cx('nav-icon-box')}><PersonIcon onClick={()=> history.push('/MyPage')}/></div>
-    
-  console.log('navigation')
-  console.log(location.pathname);
+  // console.log('Navigation ', props)
   if (location === '/MyPage') {
     location = '마이페이지'
   } else if (location === '/HosDetail') {
@@ -78,7 +76,8 @@ const Navigation = (props) => {
 
 const mapStateToProps = (state) => ({
   status: state.status,
-  user: state.user.user
+  user: state.user.user,
+  review: state.review
 })
 
 export default connect(

@@ -20,7 +20,7 @@ const grade = scorelist.map((g, i) => ({ name: scorelabel[i], score: g }))
 
 
 const initializer = {
-	mainSearch: JSON.parse(window.localStorage.getItem('rmainSearch')) || {
+	rmainSearch: JSON.parse(window.localStorage.getItem('rmainSearch')) || {
 		searchWord: '슬개골탈구',
 		lat: 37.504909,
 		long: 127.048463,
@@ -43,14 +43,13 @@ const initializer = {
 	dojang: false,
 }
 
-console.log('reducer')
 
 export default (state = initializer, action) => {
 	switch (action.type) {
 		case REVIEW_MAIN_SEARCH:
 			return {
 				...state,
-				mainSearch: {
+				rmainSearch: {
 					searchWord: action.searchWord,
 					lat: action.lat,
 					long: action.long,
@@ -59,23 +58,21 @@ export default (state = initializer, action) => {
 				}
 			}
 		case GET_REVIEW:
-			if (state.review.some(s => 
-					(s.searchWord === action.searchWord) && 
-					(s.distance === action.distance) && 
-					(s.filter === action.filter) && 
-					(s.lat === action.lat) && 
-					(s.long === action.long))) {
-				return { state } }
-			else {
+			const item = [{ 
+				searchWord:action.searchWord, 
+				distance: action.distance,
+				filter: action.filter,
+				lat: action.lat, 
+				long: action.long, 
+				list: action.list}]
+			if (state.review.some(s => s === item)) {
+				return {
+					...state
+				}
+			} else {
 				return {
 					...state,
-					review : state.review.concat({ 
-						searchWord:action.searchWord, 
-						distance: action.distance,
-						filter: action.filter,
-						lat: action.lat, 
-						long: action.long, 
-						list: action.list})
+					review : state.review.concat(...item)
 				}
 			}
 		case GET_HOS_REVIEW:

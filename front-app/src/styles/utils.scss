@@ -331,19 +331,7 @@ $title: 'BMEULJIRO';
   margin-bottom: 10px;
 }
 
-.reciept-body {
-  @include flex-center();
-  @include flex-vertical();
-  align-items: center;
-  width: 100%;
-}
 
-.auth-body {
-  @include flex-center();
-  @include flex-vertical();
-  align-items: center;
-  width: 100%;
-}
 
 .search-list-box {
   @include round-border();
@@ -398,7 +386,7 @@ textarea {
   }
 }
 
-input[type="text"] {
+input {
   background-color: transparent;
   width: calc(100% - 25px);
   margin-right: 5px;
@@ -416,20 +404,28 @@ input[type="text"] {
   }
 }
 
-input[type="tel"] {
-  background-color: transparent;
-  width: calc(100% - 25px);
-  margin-right: 5px;
+.border-button {
+	background-color:$beige;
+	cursor:pointer;
+	color:$darkgreen;
+	font-weight:bold;
+  text-shadow:0px 1px 0px #ffffff;
+  @include width-size(0px);
+  @include flex-center();
   @include round-border();
-  font-family: 'NeoDunggeunmo';
-  line-height:140%;
-  padding: 1px 5px;
-  &:focus {
-    outline: none;
-    @include active-background();
+  border-bottom: 3px double $darkgreen;
+  border-right: 3px double $darkgreen;
+  position:relative;
+  p {
+    margin:2px;
   }
-  &::selection {
-    background-color: $darkgreen;
-    color: $beige;
+  span {
+    font-weight: lighter;
+    text-shadow: none;
+    color: $red;
+    font-size: x-small;
+    position:absolute;
+    left:calc(50% + 45px);
+    bottom: 0;
   }
 }
