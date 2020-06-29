@@ -1,6 +1,5 @@
 import React from "react";
 import GradeBox from '../../components/HosGrades/GradeBox'
-import ReviewPrice from '../../components/ReviewPrice/ReviewPrice'
 import styles from './mystyle.module.scss';
 import ThumbIcon from '@material-ui/icons/ThumbUpAlt';
 import SportsIcon from '@material-ui/icons/Sports';
@@ -48,12 +47,6 @@ class ReviewDetail extends React.Component {
     )
 
     const totallike = this.props.location.state.review.rtotalgood
-    // const tags = []
-
-    // for (const [index, value] of this.props.location.state.reviewData.tags.entries()) {
-    //   console.log('ReviewDetail value',value)
-    //   tags.push(<div className={cx('tag')} key={index}>#{value}</div>)
-    // }
 
     return (
       <div className={cx('container')}>
@@ -62,7 +55,6 @@ class ReviewDetail extends React.Component {
             #{this.props.location.state.review.hospital.hname}
           </div>
 
-          {/* {tags} */}
         </div>
         <div className={cx('meta-box')}>
           {/* <p>{this.props.location.state.review.rtreatmentdata} 진료</p> */}

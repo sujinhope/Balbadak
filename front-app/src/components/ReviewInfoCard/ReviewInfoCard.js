@@ -37,9 +37,9 @@ const ReviewInfoCard = props => {
           <h4>#{review.rpurpose} #{review.hospital.hname}</h4>
         </div>
         <div className={cx('meta-box')}>
-          <img className={cx('hos-icon')} src={require('../../assets/star.png')}/>
+          <img className={cx('hos-icon')} src={require('../../assets/star.png')} alt=""/>
           <p>{totalgrade} 점</p>
-          <img className={cx('hos-icon')} src={require('../../assets/like.png')}/>
+          <img className={cx('hos-icon')} src={require('../../assets/like.png')} alt=""/>
           <p>{review.rtotalgood}명 </p>
         </div>
         <div className={cx('rev-content')}>

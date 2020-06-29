@@ -20,9 +20,18 @@ class Main extends React.Component {
     });
   };
 
+  // async getUserLoca() {
+  //   const position = await this.getCurrentPosition()
+  //   const {latitude, longitude} = position.coords
+  //   await this.props.mainSearch('', latitude, longitude, 'hosByLoc', 'nearHos')
+  //   history.push('/ResTab')
+  // }
+
   async getUserLoca() {
-    const position = await this.getCurrentPosition()
-    const {latitude, longitude} = position.coords
+    // const position = await this.getCurrentPosition()
+    // const {latitude, longitude} = position.coords
+    const latitude = 37.504909
+    const longitude = 127.048463
     await this.props.mainSearch('', latitude, longitude, 'hosByLoc', 'nearHos')
     history.push('/ResTab')
   }
