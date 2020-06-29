@@ -1,8 +1,10 @@
 package com.a305.balbadack.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.a305.balbadack.model.dto.Review;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,6 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
+    @Query(value="select AVG(r.r_result) from review as r where r.h_code=:h_code group by r.h_code",nativeQuery = true)
+    Double getResultScore(int h_code);
+    
+    @Query(value="select AVG(r.r_kindness) from review as r where r.h_code=:h_code group by r.h_code",nativeQuery = true)
+    Double getKindnessScore(int h_code);
+
+    @Query(value="select AVG(r.r_clean) from review as r where r.h_code=:h_code group by r.h_code",nativeQuery = true)
+    Double getCleanScore(int h_code);
+
+    @Query(value="select AVG(r.r_professionality) from review as r where r.h_code=:h_code group by r.h_code",nativeQuery = true)
+    Double getProfessionalityScore(int h_code);
+
+    @Query(value="select AVG(r.r_overtreatment) from review as r where r.h_code=:h_code group by r.h_code",nativeQuery = true)
+    Double getOvertreatmentScore(int h_code);
+    
     List<Review> findAll();
 
     Review findByrCode(int r_code);

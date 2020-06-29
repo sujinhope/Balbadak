@@ -39,9 +39,9 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Transactional
     @Override
-    public void delete(String id, String key) throws Exception {
+    public void delete(Integer aCode) throws Exception {
         try {
-            animalRepository.delete(id, key);
+            animalRepository.delete(aCode);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("동물정보 삭제 중 오류가 발생했습니다.");
@@ -49,10 +49,10 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public Animal findByACode(String u_id, Integer a_code) throws Exception {
+    public Animal findByACode(String uId, Integer aCode) throws Exception {
         Animal animal = null;
         try {
-            animal = animalRepository.findByACode(u_id, a_code);
+            animal = animalRepository.findByACode(uId, aCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,11 +60,11 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public List<Animal> findByUid(String u_id) throws Exception {
+    public List<Animal> findByUid(String uId) throws Exception {
         List<Animal> animals = null;
         try {
-            System.out.println("u_id: "+ u_id);
-            animals = animalRepository.findByUList(u_id);
+            System.out.println("u_id: "+ uId);
+            animals = animalRepository.findByUList(uId);
             System.out.println(animals.toString());
         } catch (Exception e) {
             e.printStackTrace();

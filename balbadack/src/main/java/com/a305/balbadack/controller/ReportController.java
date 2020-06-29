@@ -57,5 +57,9 @@ public class ReportController {
         ReportService.delete(re_code);
     }
 
-
+    @ApiOperation("신고하기 전체 조회하기")
+    @PostMapping(value="/findAll")
+    public List<Report> findAll(){
+        return ReportService.findAll();
+    }
 }

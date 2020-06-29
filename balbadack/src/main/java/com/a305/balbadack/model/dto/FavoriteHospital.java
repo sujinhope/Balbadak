@@ -31,6 +31,12 @@ public class FavoriteHospital {
 	@Column(nullable = false, unique = true, name = "f_code")
     private int fCode;
 
+    @Column(nullable = false, name="u_id")
+    private String uId;
+
+    @Column(nullable = false, name="h_code")
+    private Integer hCode;
+
     // 아이디
     @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "u_id", referencedColumnName = "u_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_favoritehospital_uid"))

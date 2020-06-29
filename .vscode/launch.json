@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DemoApplication<balbadack>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.a305.balbadack.DemoApplication",
+            "projectName": "balbadack",
+            "args": ""
+        }
+    ]
+}

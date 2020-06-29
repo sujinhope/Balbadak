@@ -15,7 +15,7 @@ public interface AnimalService {
 	public void update(Animal animal) throws Exception;
 
 	@Secured("ROLE_USER")
-	public void delete(String id, String key) throws Exception;
+	public void delete(Integer aCode) throws Exception;
 
 	@Secured("ROLE_USER")
 	public Animal findByACode(String u_id, Integer a_code) throws Exception;

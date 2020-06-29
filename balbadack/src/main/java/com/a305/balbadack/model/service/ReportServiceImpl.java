@@ -60,5 +60,15 @@ public class ReportServiceImpl implements ReportService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Report> findAll() {
+        try {
+            return reportRepository.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
 }

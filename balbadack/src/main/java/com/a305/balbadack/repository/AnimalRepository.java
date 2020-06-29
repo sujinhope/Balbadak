@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface AnimalRepository extends JpaRepository<Animal, Integer>{
 
     @Modifying
-    @Query(value = "delete from animal a where a.u_id=:id and a.a_code=:code", nativeQuery = true)
-	void delete(@Param("id") String id, @Param("code") String code);
+    @Query(value = "delete from animal a where a.a_code=:code", nativeQuery = true)
+	void delete(@Param("code") Integer code);
 
     @Query(value = "select * from animal a where a.u_id=:uid", nativeQuery = true)
     List<Animal> findByUList(String uid);

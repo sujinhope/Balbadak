@@ -10,6 +10,10 @@ public interface UserService {
     public void update(User user) throws Exception;
     public User findById(String id) throws Exception;
 
+    public boolean updatePassword(String id, String oldPw, String newPw) throws Exception;
+
+    public boolean updateSms(String uId, Boolean flag) throws Exception;
+
     public List<User> findAll() throws Exception;
 
     public boolean login(String id, String password) throws Exception;

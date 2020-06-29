@@ -1,0 +1,43 @@
+@import '../../styles/utils.scss';
+
+
+
+
+.rev-box {
+  border-top: 1.3px dotted $darkgreen;
+  border-bottom: 1.3px dotted $darkgreen;
+  padding: 4px;
+  width: calc(100% - 10.6px);
+  margin-bottom: 10px;
+
+  p { margin: 0; text-align: center; margin-left: 5px;}
+  h4 {margin: 3px auto; padding: 3px 0; text-align: center; background-color: $darkened;}
+  .rev-header {
+    width: 100%;
+  }
+  .rev-meta-box {
+    @include flex-center();
+    width: 100%;
+  }
+  .rev-content {
+    width: calc(100% - 4px);
+    padding: 2px;
+    background-color: $darkened;
+  }
+}
+
+
+.meta-box {
+  width: 100%;
+  @include flex-center;
+  margin: 5px auto;
+  p {
+    margin: 0 10px 0 5px;
+    line-height: 15px;
+  }
+  .hos-icon {
+    height: 15px;
+    width: 15px;
+    margin-right: 5px;
+  }
+}

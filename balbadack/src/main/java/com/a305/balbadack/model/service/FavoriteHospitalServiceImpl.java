@@ -16,11 +16,11 @@ public class FavoriteHospitalServiceImpl implements FavoriteHospitalService {
     @Autowired
     FavoriteHospitalRepository favoriteHospitalRepository;
 
-    // @Autowired
-    // HospitalRepository hospitalRepository;
+    @Autowired
+    HospitalRepository hospitalRepository;
 
     @Override
-    public void insert(FavoriteHospital favoriteHospital) {
+    public void insert(FavoriteHospital favoriteHospital) throws RuntimeException {
         
         try {
             favoriteHospitalRepository.save(favoriteHospital);
@@ -32,7 +32,7 @@ public class FavoriteHospitalServiceImpl implements FavoriteHospitalService {
     }
     
     @Override
-    public void delete(FavoriteHospital favoriteHospital) {
+    public void delete(FavoriteHospital favoriteHospital) throws RuntimeException {
         
         try {
             favoriteHospitalRepository.delete(favoriteHospital);
@@ -44,12 +44,12 @@ public class FavoriteHospitalServiceImpl implements FavoriteHospitalService {
     }   
 
     @Override
-    public List<Hospital> findByU_id(String u_id) {
+    public List<Hospital> findByUId(String u_id) throws RuntimeException {
         List<Hospital> hospitals = null;
         try {
             System.out.println();
             List<Integer> h_codes = favoriteHospitalRepository.findByUid(u_id);
-            // hospitals = hospitalRepository.findByHcodeList(h_codes);
+            hospitals = hospitalRepository.findByhCodeInhCodeList(h_codes);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,9 +6,9 @@ import com.a305.balbadack.model.dto.FavoriteHospital;
 import com.a305.balbadack.model.dto.Hospital;
 
 public interface FavoriteHospitalService {
-    public void insert(FavoriteHospital favoriteHospital);
+    public void insert(FavoriteHospital favoriteHospital) throws RuntimeException;
 
-    public List<Hospital> findByU_id(String u_id);
+    public List<Hospital> findByUId(String u_id) throws RuntimeException;
 
-    public void delete(FavoriteHospital favoriteHospital);
+    public void delete(FavoriteHospital favoriteHospital) throws RuntimeException;
 }

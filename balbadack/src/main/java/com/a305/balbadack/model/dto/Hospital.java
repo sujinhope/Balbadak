@@ -30,8 +30,34 @@ public class Hospital{
   @Column(nullable = false, unique = true, name = "h_code")
   private Integer hCode;
   
+  @Transient
+  private Double dist;
+
+  @Transient
+	private List<HospitalPicture> hospitalPicture;
+
+  // 점수
+  @Transient
+  private Double ScoreResult;
+
+  @Transient
+  private Double ScoreKindness;
+
+  @Transient
+  private Double ScoreClean;
+
+  @Transient
+  private Double ScoreProfessionality;
+  
+  @Transient
+  private Double ScoreOvertreatment;
+  
+  // 적절한 진료 
   // @Transient
-	// private Double dist;
+  // private List<Integer> detailScore;
+
+  // @OneToMany(mappedBy="hospital")
+  // private List<Review> review;
 
   // @OneToMany(mappedBy="hospital")
   // private List<Review> review;
