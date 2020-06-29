@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import { connect } from "react-redux";
 import styles from './mystyle.module.scss';
 import classNames from 'classnames/bind';
 

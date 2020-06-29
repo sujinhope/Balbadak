@@ -14,7 +14,7 @@ class ReviewRes extends Component {
   constructor(props) {
     super(props);
     let isLoggedIn = true
-    if (props.user !== {}) {
+    if (props.user.uid !== undefined) {
       const { searchWord, lat, long, distance, filter } = props.rmainSearch
       if (props.review.length !== 0) {
         if (!(props.review.find(s =>
@@ -51,7 +51,7 @@ class ReviewRes extends Component {
         reviewCards = list.map(r => <ReviewInfoCard hospitalData={r} key={`newCard${r.review.rcode}`} />)
       } else {
         return (
-          reviewCards = <EmptyList mes='empty'/>
+          reviewCards = <EmptyList mess='empty'/>
         )
       }
       return (
@@ -62,7 +62,7 @@ class ReviewRes extends Component {
     } else {
       return (
         <div>
-          <EmptyList mes='noAuth'/>
+          <EmptyList mess='noAuth'/>
         </div>
       )
     }
