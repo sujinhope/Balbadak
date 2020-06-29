@@ -103,6 +103,7 @@ public class UserController {
 		
 		user.setUPw(passwordEncoder.encode(user.getUPw()));
 		user.setUCode(1);
+		user.setUDeleted(false);
 
         try {
 			Boolean check = userService.create(user);
@@ -190,6 +191,28 @@ public class UserController {
             return handleFail(e.toString(), HttpStatus.BAD_REQUEST);
         }
 	} 
+
+	@ApiOperation("휴대폰 인증 여부 변경")
+	@PostMapping("/sms")
+	public ResponseEntity<Map<String, Object>> password(@RequestParam boolean sms) {
+		
+		String uId = jwtService.getIdFromJwt();
+
+		boolean flag = false;
+
+		try {
+			flag = userService.updateSms(uId, sms);
+		} catch (Exception e) {
+			return handleFail(e.toString(), HttpStatus.BAD_REQUEST);
+		}
+
+		if(flag) {
+			return handleSuccess("휴대폰 인증을 완료하였습니다.");
+		} else {
+			return handleFail("휴대폰 인증에 실패하였습니다.", HttpStatus.BAD_REQUEST);
+		}
+	
+	}
 
 	@ApiOperation("비밀번호 변경")
 	@PostMapping("/password")

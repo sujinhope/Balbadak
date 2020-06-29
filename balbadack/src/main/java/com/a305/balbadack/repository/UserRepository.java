@@ -32,6 +32,10 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "update User u set u.deleted = 1 where u.id=:id", nativeQuery = true)
     void userDeleted(@Param("id") String id);
 
+    @Modifying
+    @Query(value = "update user u set u.u_sms = :flag where u.u_id=:uId", nativeQuery = true)
+	void updateSms(String uId, Boolean flag);
+
     // @Query(value = "select  from user u where u.id=:id", nativeQuery = true)
 	// UserDetails findUserdetailsByUid(String id);
 
