@@ -59,6 +59,32 @@ public class HospitalController {
     return hospitalService.findByHName(Name);
   }
 
+  // 병원 코드 리스트를 받으면, 병원 객체를 리턴
+  @ApiOperation("병원 코드로 병원 정보 조회")
+  @PostMapping(value="/code")
+  public List<Hospital> findHospitalByCode(@RequestBody final List<Integer> hCodeList){
+    List<Hospital> hospitalList = hospitalService.findByCode(hCodeList);
+    for(int i =0; i<hospitalList.size(); i++){
+      Hospital hospital = hospitalList.get(i);
+      // 병원 사진 설정 해주기
+      List<HospitalPicture> HospitalPictureList = hospitalPictureService.findByhPhotoCode(hospital.getHPhotocode());
+      // System.out.println(hospital.getHPhotocode());
+      hospital.setHospitalPicture(HospitalPictureList);
+    // 리뷰 평점 계산하기
+      hospital.setScoreResult(reviewRepository.getResultScore(hospital.getHCode()));
+
+      hospital.setScoreKindness(reviewRepository.getKindnessScore(hospital.getHCode()));
+
+      hospital.setScoreClean(reviewRepository.getResultScore(hospital.getHCode()));
+
+      hospital.setScoreProfessionality(reviewRepository.getProfessionalityScore(hospital.getHCode()));
+
+      hospital.setScoreOvertreatment(reviewRepository.getOvertreatmentScore(hospital.getHCode()));
+      
+    }
+      return hospitalList;
+  }
+
 
   // 1. 병원이름으로 검색 2. 지역으로 검색 3. 나머지는 태그 테이블로 
   @ApiOperation("병원 검색하기")

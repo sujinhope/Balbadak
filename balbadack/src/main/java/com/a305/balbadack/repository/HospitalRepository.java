@@ -12,6 +12,9 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface HospitalRepository extends JpaRepository<Hospital, Integer> {
 
+  // 병원 코드로 병원 리스트 반환
+  List<Hospital> findByhCodeIn(List<Integer> hCodeList);
+    
   // 병원 이름으로 검색
   @Query(value = "select * from hospital as h where h.h_name like concat('%', :Name, '%')",nativeQuery = true)
   List<Hospital> findByhNameLike(@Param("Name") String Name);
