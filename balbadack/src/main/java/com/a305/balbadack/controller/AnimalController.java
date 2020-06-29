@@ -116,7 +116,7 @@ public class AnimalController {
 			}
 		} else {
 			return handleFail("삭제할 수 없습니다.", HttpStatus.BAD_REQUEST);
-		}      
+		}     
 
 	}
 
