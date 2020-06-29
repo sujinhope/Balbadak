@@ -10,16 +10,16 @@ import lombok.*;
 @Setter
 @ToString
 @Entity
-@Table(name = "careinfo")
+@Table(name = "carelist")
 public class Carelist {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY로 해야 Auto Increment
-	@Column(nullable = false, unique = true)
-    private int c_code;
+	@Column(nullable = false, unique = true, name = "c_code")
+    private int cCode;
     
-    @Column(length = 50, nullable = false)
-    private String c_name;
+    @Column(length = 50, nullable = false, name = "c_name")
+    private String cName;
 
-    @Column(length = 50, nullable = false)
-    private String c_category;
+    @Column(length = 50, nullable = false, name = "c_category")
+    private String cCategory;
 }

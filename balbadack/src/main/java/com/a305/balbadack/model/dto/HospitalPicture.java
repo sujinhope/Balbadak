@@ -26,19 +26,27 @@ import lombok.AccessLevel;
 @Setter
 @ToString
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class)
-@Table(name = "hospitalPicture")
+@Table(name = "hospital_picture")
 public class HospitalPicture {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, unique = true, name="p_code")
-  private int p_code;
+  private int pCode;
 
-  @Column(length = 100)
-  private String h_image;
+  @Column(length = 100, name="h_image")
+  private String hImage;
 
+  // 병원 테이블의 사진 코드
+  @Column(length = 100, name="h_photocode")
+  private String hPhotoCode;
+  
+  // 삭제 여부 
+  @Column(columnDefinition = "Boolean default false", name = "hp_deleted")
+  private Boolean hpDeleted;
+  
 
-// 외래키
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "h_code", referencedColumnName = "h_code", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_h_code"))
-  private Hospital hospital;
+// 외래키 안하기로함 
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "h_code", referencedColumnName = "h_code", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_h_code"))
+  // private Hospital hospital;
 }

@@ -1,7 +1,5 @@
 package com.a305.balbadack.model.dto;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,9 +21,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
@@ -35,29 +35,26 @@ import lombok.Getter;
 public class Veterinarian {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false, unique = true)
-  private int v_code;
+  @Column(nullable = false, unique = true, name = "v_code")
+  private int vCode;
 
-  @Column(length = 500)
-  private String v_profile;
+  @Column(length = 20, name = "v_name")
+  private String vName;
+
+  @Column(length = 500, name = "v_profile")
+  private String vProfile;
   
-  @Column(length = 500)
-  private String v_career;
+  @Column(length = 500, name = "v_career")
+  private String vCareer;
 
-  @Column(length = 500)
-  private String v_special;
-
-  @Column(length = 20)
-  private String v_name;
-
-  // 외래키 설정
-  @OneToOne(mappedBy="user")
-  private User user;
+  @Column(length = 500, name = "v_special")
+  private String vSpecial;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "h_code", referencedColumnName = "h_code", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_h_code"))
-  private Hospital Hospital;
+  private Hospital hospital;
 
-	@Column(columnDefinition = "boolean default false")
-	private boolean v_deleted;
+	@Column(columnDefinition = "boolean default false", name = "v_deleted")
+  private boolean vDeleted;
+  
 }

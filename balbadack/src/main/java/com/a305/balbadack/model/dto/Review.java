@@ -17,54 +17,81 @@ public class Review {
 
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY로 해야 Auto Increment
-	@Column(nullable = false, unique = true)
-    private int r_code;
+	@Column(nullable = false, unique = true, name = "r_code")
+    private int rCode;
     
-    @ManyToOne
-    @JoinColumn(name = "u_id", referencedColumnName = "u_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_user_u_id"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "u_id", referencedColumnName = "u_id", insertable = true, updatable = false, foreignKey = @ForeignKey(name = "fk_user_u_id"))
     private User user;
 
-    @Column(length = 20, nullable = false)
-    private String r_nickname;
+    @Column(length = 500, nullable = true, name = "r_photo1")
+    private String rPhoto1;
 
-    @Column(length = 500, nullable = true)
-    private String r_photo;
+    @Column(length = 500, nullable = true, name = "r_photo2")
+    private String rPhoto2;
 
-    @Column(length = 1000, nullable = true)
-    private String r_content;
+    @Column(length = 500, nullable = true, name = "r_photo3")
+    private String rPhoto3;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean r_receipt;
+    @Column(length = 1000, nullable = true, name = "r_content")
+    private String rContent;
 
-    @Column(nullable = false)
-    private Date r_treatmentdate;
+    @Column(nullable = false, columnDefinition = "boolean default false", name = "r_receipt")
+    private boolean rReceipt;
 
-    @Column(nullable = false)
-    private Date r_date;
+    @Column(nullable = false, name = "r_treatmentdate")
+    private Date rTreatmentdate;
+
+    @Column(nullable = false, name = "r_date")
+    private Date rDate;
     
-    @Column(nullable = false)
-    private int r_overtreatment;
+    @Column(nullable = false, name = "r_overtreatment")
+    private double rOvertreatment;
     
-    @Column(nullable = false)
-    private int r_kindness;
+    @Column(nullable = false, name = "r_kindness")
+    private double rKindness;
     
-    @Column(nullable = false)
-    private int r_result;
-    
-    @Column(nullable = false)
-    private int r_clean;
-    
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private int r_report;
-    
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean r_deleted;
+    @Column(nullable = false, name = "r_result")
+    private double rResult;
 
-    @OneToMany(mappedBy="review")
-    private Careinfo careinfo;
+    @Column(nullable = false, name = "r_professionality")
+    private double rProfessionality;
+    
+    @Column(nullable = false, name = "r_clean")
+    private double rClean;
 
-    @ManyToOne
-    @JoinColumn(name = "h_code", referencedColumnName = "h_code", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_hospital_h_code"))
+    @Column(nullable = false, columnDefinition = "boolean default false", name = "r_revisit")
+    private boolean rRevisit;
+    
+    @Column(length = 100, nullable = false, name = "r_purpose")
+    private String rPurpose;
+    
+    @Column(nullable = false, columnDefinition = "int default 0", name = "r_report")
+    private int rReport;
+    
+    @Column(nullable = false, columnDefinition = "boolean default false", name = "r_deleted")
+    private boolean rDeleted;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "h_code", referencedColumnName = "h_code", insertable = true, updatable = false, foreignKey = @ForeignKey(name = "fk_hospital_h_code"))
     private Hospital hospital;
+    
+    // @OneToMany(mappedBy="review")
+    // private List<Careinfo> careinfo;
+
+    // @OneToMany(mappedBy="review")
+    // private List<Report> report;
+
+    // @OneToMany(mappedBy="review")
+    // private List<Good> good;
+
+    @Column(nullable = true, name = "r_starrating")
+    private double rStarrating;
+
+    @Column(nullable = false, columnDefinition = "int default 0", name = "r_totalgood")
+    private int rTotalgood;
+
+    @Transient
+    private int min;
     
 }

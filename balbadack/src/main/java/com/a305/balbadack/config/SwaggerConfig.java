@@ -39,15 +39,15 @@ public class SwaggerConfig {
                 .globalOperationParameters(aParameters)
                 .apiInfo(info())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ssafysns.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.a305.balbadack.controller"))
                 .paths(PathSelectors.any()).build();
     }
 
     private ApiInfo info() {
         return new ApiInfoBuilder()
-                .title("SSAFY SNS API")
-                .description("SSAFY SNS Service를 위한 <b>CRUD</b>")
-                .license("A305")
+                .title("BALBADACK (발바닥) API")
+                .description("발품팔지않고 바로 만나는 애니멀 닥터 <b>CRUD</b>")
+                .license("SSAFY 2기 서울 3반 심화프로젝트 A305")
                 .version("1.0")
                 .build();
     }

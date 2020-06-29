@@ -1,6 +1,5 @@
 package com.a305.balbadack.model.dto;
 
-import com.a305.balbadack.model.dto.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,20 +24,20 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Entity(name="like")
-public class Like {
+@Entity(name="good")
+public class Good {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY로 해야 Auto Increment
-	@Column(nullable = false, unique = true)
-    private int l_code;
+	@Column(nullable = false, unique = true, name = "g_code")
+    private int gCode;
     
     // 리뷰코드
     @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "r_code", referencedColumnName = "r_code", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_review_rcode"))
+    @JoinColumn(name = "r_code", referencedColumnName = "r_code", insertable = true, updatable = false, foreignKey = @ForeignKey(name = "fk_review_rcode"))
 	private Review review;
 
     // 아이디
     @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "u_id", referencedColumnName = "u_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_like_uid"))
+	@JoinColumn(name = "u_id", referencedColumnName = "u_id", insertable = true, updatable = false, foreignKey = @ForeignKey(name = "fk_user_uid"))
 	private User user;
 }

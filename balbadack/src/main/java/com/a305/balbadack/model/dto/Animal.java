@@ -29,20 +29,26 @@ public class Animal {
 
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY로 해야 Auto Increment
-	@Column(nullable = false, unique = true)
-    private int a_code;
+	@Column(nullable = false, unique = true, name = "a_code")
+    private Integer aCode;
     
-    @Column(length = 30, nullable = false)
-    private String a_type;
+    @Column(length = 30, nullable = false, name = "a_type")
+    private String aType;
 
-    @Column(length = 30, nullable = false)
-    private String a_species;
+    @Column(length = 30, nullable = false, name = "a_species")
+    private String aSpecies;
 
-    @Column(nullable = false)
-    private double a_kg;
+    @Column(nullable = false, name = "a_kg")
+    private Double aKg;
+
+    @Column(length = 10, nullable = false, name = "a_sex")
+    private String aSex;
     
-    @Column(columnDefinition = "tinyint(1) default 0")
-    private Boolean a_deleted;
+    @Column(columnDefinition = "tinyint(1) default 0", name = "a_deleted")
+    private Boolean aDeleted;
+
+    @Column(length = 50, nullable = false, name="u_id")
+    private String uId;
 
     // 아이디
     @ManyToOne(fetch = FetchType.LAZY)
